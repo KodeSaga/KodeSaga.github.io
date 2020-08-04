@@ -20,7 +20,7 @@ body{
 nav{
     grid-area: n;
     background-color: #EFEFEF;
-    padding: 2rem;
+    /* padding: 2rem; */
     display : flex;
     flex-flow: column nowrap;
 }   
@@ -32,9 +32,10 @@ button{
     margin: 10px;
     background-color: #72c3dc;
     color: #FFF;
-    font-size: 20px;
-    min-width: 40px;
-    max-height:40px;
+    font-size: 16px;
+    min-width: 42px;
+    min-height:42px;
+    max-height:42px;
     flex: 1 0 auto;
 }
 
