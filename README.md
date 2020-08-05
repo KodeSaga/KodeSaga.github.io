@@ -44,4 +44,4 @@ issues with flexbox implemetation, still not as responsive as planned, media que
 as planned. Dynamic element creation, shuffle and sort logic has been implented as imagined. Pending - after resolving css issues as mentioned above need to dynamically change some CSS styles for mobile. 
 
 Current light house report for the Site
-![image info](others\LighthouseReportV1.png)
+![Chrome Lighthouse report](./others/LighthouseReportV1.png)
