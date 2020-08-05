@@ -54,6 +54,7 @@ main{
     background-color: yellow;
     font-size: 2em;
     text-align: center;
+    color: #FFF;
     width: calc(100vw/4);
     height: calc(70vh/3);
     vertical-align: middle;

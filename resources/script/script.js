@@ -54,9 +54,9 @@ const generateHtml  = () => {
     const getHtmlLines = DUPLIST.map((key) => {
         return `<div class="square" style="background-color:${key.facade}">${key.content}</div>`
     })
-    console.log(getHtmlLines.join(" "));
+    // console.log(getHtmlLines.join(" "));
     numberContainer.innerHTML = getHtmlLines.join(" ");
-    console.log(numberContainer);
+    // console.log(numberContainer);
 };
 
 const shuffleBuddy = () => {
