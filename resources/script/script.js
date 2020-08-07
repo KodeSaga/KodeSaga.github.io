@@ -46,7 +46,6 @@ const NUMBERLIST = [
 let DUPLIST = [...NUMBERLIST];
 
 let sortedFlag = 1; /* 1 = Its sorted   0 = Not Sorted */
-let shuffleFlag = 0; /* 1 = Its shuffled   0 = Its Sorted */
 
 const numberContainer = document.getElementById("numberContainer");
 
