@@ -46,13 +46,17 @@ const NUMBERLIST = [
 let DUPLIST = [...NUMBERLIST];
 
 let sortedFlag = 1; /* 1 = Its sorted   0 = Not Sorted */
+let shuffleFlag = 0; /* 1 = Its shuffled   0 = Its Sorted */
 
 const numberContainer = document.getElementById("numberContainer");
 
 const generateHtml  = () => {
 
     const getHtmlLines = DUPLIST.map((key) => {
-        return `<div class="square" style="background-color:${key.facade}">${key.content}</div>`
+        return `<div class="square" 
+                style="background-color:${key.facade};
+                       border-color:${key.facade};">
+                ${key.content}</div>`
     })
     // console.log(getHtmlLines.join(" "));
     numberContainer.innerHTML = getHtmlLines.join(" ");
@@ -65,10 +69,13 @@ const shuffleBuddy = () => {
         [DUPLIST[pos], DUPLIST[randPos]] = [DUPLIST[randPos], DUPLIST[pos]];
     }
     generateHtml();
-    sortedFlag = 0;
-    document.getElementsByTagName("p")[0].innerHTML = "";
     document.querySelector('.sort').disabled = false; /* Re enable Sort Button */
     document.querySelector('.sort').style.backgroundColor = "#72c3dc";
+    document.querySelector('.sort').style.borderBottom = "0.25rem solid #2B8EAD";
+    document.querySelector('.sort').style.borderRight = "0.15rem solid #2B8EAD";
+    sortedFlag = 0; // array is shuffled
+
+
     
 };
 
@@ -76,13 +83,11 @@ const sortBuddy = () => {
     if(sortedFlag === 0){
         DUPLIST = [...NUMBERLIST];
         generateHtml();
-        sortedFlag = 1;
+        sortedFlag = 1; // array is sorted
     }
-    else{
-        document.getElementsByTagName("p")[0].innerHTML = "Already sorted Buddy!";
-        document.querySelector('.sort').disabled = true; /* Disable Sort Button as its already sorted*/
-        document.querySelector('.sort').style.backgroundColor = "#BFBFBF";
-    }
+    document.querySelector('.sort').disabled = true; /* Disable Sort Button as its already sorted*/
+    document.querySelector('.sort').style.backgroundColor = "#BFBFBF";
+    document.querySelector('.sort').style.border="none";
 };
 
 
