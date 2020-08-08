@@ -39,9 +39,12 @@ as planned.
 
 issues with flexbox implemetation, still not as responsive as planned, media queries yet to be added. Flexbox is killing me. Ignoring fluid typography for now.  
 
+Now its a mobile first responsive design, I was trying to avoid media queries, trying some minmax stuff on grids but had to use them in the end.
+Fluid typography is another challenge that I need to master.
+
 ## JS
 
-as planned. Dynamic element creation, shuffle and sort logic has been implented as imagined. Pending - after resolving css issues as mentioned above need to dynamically change some CSS styles for mobile. 
+as planned. Dynamic element creation, shuffle and sort logic has been implented as imagined. 
 
 Current light house report for the Site
 ![Chrome Lighthouse report](./others/LighthouseReportV1.png)
