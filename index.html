@@ -43,9 +43,9 @@
         }
     </style>
 </head>
-<body id="main-body" class="bg-home-gradient text-gray-800 h-screen flex flex-col overflow-hidden transition-colors duration-500">
+<body id="main-body" class="bg-home-gradient text-gray-800 h-[100dvh] flex flex-col overflow-hidden transition-colors duration-500">
 
-    <div class="max-w-7xl mx-auto w-full p-4 md:p-6 flex-grow flex flex-col h-full relative">
+    <div class="max-w-7xl mx-auto w-full p-4 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
         
         <div id="setup-screen" class="flex-grow flex flex-col lg:flex-row items-center justify-start lg:justify-center gap-12 lg:gap-10 overflow-y-auto overflow-x-hidden w-full h-full pt-8 pb-20 lg:py-0 px-2">
             
@@ -128,7 +128,7 @@
 
         <div id="game-screen" class="hidden flex-row h-full w-full gap-3 md:gap-6 z-10 relative">
             
-            <div class="w-12 md:w-20 flex-shrink-0 flex flex-col items-center justify-end bg-white pb-4 pt-4 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
+            <div class="w-12 md:w-20 flex-shrink-0 flex flex-col items-center justify-end bg-white pb-8 md:pb-6 pt-4 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
                 <div class="flex-grow w-3 md:w-6 bg-gray-100 rounded-full overflow-hidden relative mb-4 shadow-inner">
                     <div id="progress-fill" class="absolute bottom-0 left-0 w-full bg-emerald-400 transition-all duration-300" style="height: 0%;"></div>
                 </div>
@@ -159,7 +159,7 @@
                 <div id="warning-msg" class="hidden bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm transition-all duration-300">⚠️ Please type numbers only!</div>
                 <div id="error-msg" class="hidden bg-red-100 text-red-600 border border-red-200 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm">Oops! Please answer all questions before submitting.</div>
 
-                <div class="flex-grow overflow-y-auto pb-6 pr-1 md:pr-2">
+                <div class="flex-grow overflow-y-auto pb-24 pr-1 md:pr-2">
                     <div id="questions-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         </div>
                 </div>
@@ -521,7 +521,7 @@
             
             const backBtn = document.createElement('button');
             backBtn.textContent = "⬅ Back to Results";
-            backBtn.className = "col-span-full w-full bg-gray-200 text-gray-700 font-black text-lg py-4 rounded-xl hover:bg-gray-300 transition mt-2 shadow-sm border-b-4 border-gray-400";
+            backBtn.className = "col-span-full w-full bg-gray-200 text-gray-700 font-black text-lg py-4 rounded-xl hover:bg-gray-300 transition mt-4 mb-10 shadow-sm border-b-4 border-gray-400";
             backBtn.onclick = () => {
                 screens.game.classList.remove('flex');
                 screens.game.classList.add('hidden');
