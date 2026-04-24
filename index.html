@@ -341,20 +341,34 @@
 
         function renderQuestions() {
             grid.innerHTML = '';
-            
-            // Shared responsive font size based on column count
-            let sharedFontClass = 'text-xl md:text-2xl lg:text-3xl';
-            if (currentColumns === 4) {
-                sharedFontClass = 'text-lg md:text-xl lg:text-2xl';
-            } else if (currentColumns === 3) {
-                sharedFontClass = 'text-xl md:text-2xl lg:text-2xl';
-            }
-                
-            const inputWidth = currentColumns >= 3 ? 'w-14 md:w-20' : 'w-16 md:w-24';
 
             questions.forEach((q, index) => {
                 const item = document.createElement('div');
-                item.className = 'bg-white p-3 md:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors overflow-hidden gap-2 md:gap-3 min-w-0';
+                item.className = 'bg-white p-2 md:p-3 lg:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors gap-2 min-w-0 overflow-hidden';
+
+                // SMART SCALING LOGIC
+                // Scales font dynamically based on character count and chosen columns
+                const len = q.text.length;
+                let sharedFontClass = '';
+
+                if (currentColumns === 4) {
+                    if (len >= 16) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-base tracking-tighter';
+                    else if (len >= 12) sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-lg tracking-tight';
+                    else sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-xl';
+                } else if (currentColumns === 3) {
+                    if (len >= 16) sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-lg tracking-tighter';
+                    else if (len >= 12) sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-xl tracking-tight';
+                    else sharedFontClass = 'text-base sm:text-lg md:text-xl lg:text-2xl';
+                } else {
+                    // 1 or 2 columns
+                    if (len >= 16) sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-2xl tracking-tight';
+                    else if (len >= 12) sharedFontClass = 'text-base sm:text-lg md:text-xl lg:text-3xl tracking-tight';
+                    else sharedFontClass = 'text-lg sm:text-xl md:text-2xl lg:text-3xl';
+                }
+
+                // Dynamically adjust input width based on columns so it doesn't take too much space
+                const inputWidth = currentColumns === 4 ? 'w-12 sm:w-14 md:w-16 lg:w-20' : 
+                                  (currentColumns === 3 ? 'w-14 sm:w-16 md:w-20' : 'w-16 sm:w-20 md:w-24');
 
                 let inputHTML = '';
                 if (isReviewMode) {
@@ -363,15 +377,16 @@
                         <div class="flex flex-col items-end flex-shrink-0">
                             <input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" 
                                 class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">
-                            ${!isCorrect ? `<span class="text-[10px] md:text-sm text-emerald-600 mt-1 font-black bg-emerald-50 px-2 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}
+                            ${!isCorrect ? `<span class="text-[9px] md:text-xs text-emerald-600 mt-0.5 font-black bg-emerald-50 px-1.5 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}
                         </div>`;
                 } else {
                     inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" oninput="saveAnswer(${index}, this)" 
                                 class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
                 }
 
+                // whitespace-nowrap ensures it stays on one line, font size guarantees it fits
                 item.innerHTML = `
-                    <span class="whitespace-nowrap flex-grow text-left ${sharedFontClass} tracking-tighter w-full overflow-hidden">
+                    <span class="whitespace-nowrap flex-grow text-left ${sharedFontClass} w-full overflow-visible">
                         ${q.text} = 
                     </span>
                     ${inputHTML}
@@ -420,18 +435,13 @@
         function setColumns(cols) {
             currentColumns = cols;
             
-            // Hardcoded Tailwind mappings to ensure the browser processes them correctly
             let colClass = '';
             if (cols === 2) colClass = 'lg:grid-cols-2';
             else if (cols === 3) colClass = 'lg:grid-cols-3';
             else if (cols === 4) colClass = 'lg:grid-cols-4';
 
-            // grid-cols-1 forces Mobile into 1 column. 
-            // sm:grid-cols-2 forces tablets into 2 columns.
-            // lg:grid-cols-X dictates the desktop/laptop layout based on user selection.
             grid.className = `grid grid-cols-1 sm:grid-cols-2 ${colClass} gap-3 md:gap-4`;
             
-            // Update button styles safely
             [2, 3, 4].forEach(c => {
                 const btn = document.getElementById(`btn-col-${c}`);
                 if (btn) {
@@ -444,7 +454,7 @@
             });
             
             if (questions.length > 0) {
-                renderQuestions();
+                renderQuestions(); // Re-render to adjust smart fonts if columns change
             }
         }
 
