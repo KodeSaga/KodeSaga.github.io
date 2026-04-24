@@ -47,81 +47,84 @@
 
     <div class="max-w-7xl mx-auto w-full p-4 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
         
-        <div id="setup-screen" class="flex-grow flex flex-col lg:flex-row items-center justify-start lg:justify-center gap-12 lg:gap-8 overflow-y-auto overflow-x-hidden w-full h-full pt-8 pb-20 lg:py-2 px-2">
+        <div id="setup-screen" class="flex-grow overflow-y-auto overflow-x-hidden w-full h-full flex flex-col">
             
-            <div class="bg-white/90 backdrop-blur-sm p-8 md:p-10 lg:p-6 xl:p-8 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0 mt-4 lg:mt-0">
+            <div class="m-auto flex flex-col lg:flex-row gap-12 lg:gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-8 pb-20 lg:py-6 px-2">
                 
-                <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
-                <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
+                <div class="bg-white/90 backdrop-blur-sm p-8 md:p-10 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
+                    
+                    <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
+                    <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
 
-                <h1 class="text-4xl lg:text-3xl xl:text-4xl font-black text-center mb-6 lg:mb-4 xl:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
-                    Math Sprint! 🚀
-                </h1>
-                
-                <div class="grid grid-cols-2 gap-4 lg:gap-3 xl:gap-4 mb-5 lg:mb-3 xl:mb-5">
-                    <div>
-                        <label class="block text-sm font-bold mb-2 text-indigo-900">Problems</label>
-                        <select id="problem-count" class="w-full p-3 lg:p-2 xl:p-3 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                            <option value="20">20 Problems</option>
-                            <option value="40">40 Problems</option>
-                            <option value="60">60 Problems</option>
-                        </select>
+                    <h1 class="text-4xl lg:text-3xl font-black text-center mb-6 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
+                        Math Sprint! 🚀
+                    </h1>
+                    
+                    <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Problems</label>
+                            <select id="problem-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                <option value="20">20 Problems</option>
+                                <option value="40">40 Problems</option>
+                                <option value="60">60 Problems</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Format</label>
+                            <select id="term-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                <option value="2">2 Numbers</option>
+                                <option value="3">3 Numbers</option>
+                                <option value="4">4 Numbers</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2 text-indigo-900">Format</label>
-                        <select id="term-count" class="w-full p-3 lg:p-2 xl:p-3 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                            <option value="2">2 Numbers</option>
-                            <option value="3">3 Numbers</option>
-                            <option value="4">4 Numbers</option>
-                        </select>
+
+                    <div class="mb-5 lg:mb-4">
+                        <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Operations</label>
+                        <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 lg:p-2 shadow-inner">
+                            <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-6 h-6 lg:w-5 lg:h-5 text-pink-500 rounded accent-pink-500"> <span class="font-black text-2xl lg:text-xl text-pink-600">+</span></label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-6 h-6 lg:w-5 lg:h-5 text-blue-500 rounded accent-blue-500"> <span class="font-black text-3xl lg:text-2xl text-blue-600">-</span></label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-5 lg:mb-3 xl:mb-5">
-                    <label class="block text-sm font-bold mb-2 text-indigo-900">Operations</label>
-                    <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 lg:p-2 xl:p-3 shadow-inner">
-                        <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-6 h-6 text-pink-500 rounded accent-pink-500"> <span class="font-black text-2xl text-pink-600">+</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-6 h-6 text-blue-500 rounded accent-blue-500"> <span class="font-black text-3xl text-blue-600">-</span></label>
+                    <div id="number-limit-container" class="mb-5 lg:mb-4">
+                        <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Max Number Limit</label>
+                        <input type="number" id="number-limit" value="10" min="1" max="100" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                        <p class="text-xs text-gray-500 mt-1 font-semibold">Highest number for additions and subtractions.</p>
                     </div>
+
+                    <div class="mb-8 lg:mb-5 bg-yellow-50 p-3 lg:p-2 rounded-xl border border-yellow-200">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="allow-negative" class="w-6 h-6 lg:w-5 lg:h-5 text-yellow-500 rounded accent-yellow-500">
+                            <span class="text-sm font-bold text-yellow-800">Allow negative answers <br><span class="text-yellow-600/70 font-semibold text-xs">(e.g. 2 - 5 = -3)</span></span>
+                        </label>
+                    </div>
+
+                    <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-xl lg:text-lg py-4 lg:py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700">
+                        GO! (10:00)
+                    </button>
                 </div>
 
-                <div id="number-limit-container" class="mb-5 lg:mb-3 xl:mb-5">
-                    <label class="block text-sm font-bold mb-2 text-indigo-900">Max Number Limit</label>
-                    <input type="number" id="number-limit" value="10" min="1" max="100" class="w-full p-3 lg:p-2 xl:p-3 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                    <p class="text-xs text-gray-500 mt-1 lg:mt-0 xl:mt-1 font-semibold">Highest number for additions and subtractions.</p>
-                </div>
+                <div class="relative bg-white px-6 pb-8 pt-12 md:px-10 md:pb-10 md:pt-16 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
+                    
+                    <div class="absolute -top-12 lg:-top-8 left-1/2 transform -translate-x-1/2 z-20">
+                        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-24 h-24 lg:w-16 lg:h-16 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
+                    </div>
+                    
+                    <img src="https://media.giphy.com/media/L3ERvA6jWCd0qO4NdX/giphy.gif" alt="Running Dinosaur" class="absolute -bottom-8 lg:-bottom-6 -right-4 w-28 h-28 lg:w-20 lg:h-20 z-20 hover:scale-110 transition-transform drop-shadow-md">
 
-                <div class="mb-8 lg:mb-4 xl:mb-8 bg-yellow-50 p-3 lg:p-2 xl:p-3 rounded-xl border border-yellow-200">
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" id="allow-negative" class="w-6 h-6 text-yellow-500 rounded accent-yellow-500">
-                        <span class="text-sm lg:text-xs xl:text-sm font-bold text-yellow-800">Allow negative answers <br><span class="text-yellow-600/70 font-semibold text-xs">(e.g. 2 - 5 = -3)</span></span>
-                    </label>
-                </div>
+                    <div class="absolute top-1/4 -left-6 text-4xl text-yellow-500 font-black animate-float-delayed select-none hidden md:block">×</div>
+                    <div class="absolute bottom-1/4 -left-6 text-5xl text-emerald-400 font-black animate-float select-none hidden md:block">÷</div>
+                    <div class="absolute top-1/3 -right-4 text-4xl text-indigo-400 font-black animate-float select-none hidden md:block">⚖️</div>
 
-                <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-xl lg:text-lg xl:text-xl py-4 lg:py-3 xl:py-4 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700">
-                    GO! (10:00)
-                </button>
-            </div>
-
-            <div class="relative bg-white px-6 pb-8 pt-12 md:px-10 md:pb-10 md:pt-16 lg:px-8 lg:pb-6 lg:pt-10 xl:px-10 xl:pb-8 xl:pt-12 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0">
-                
-                <div class="absolute -top-12 lg:-top-10 xl:-top-12 left-1/2 transform -translate-x-1/2 z-20">
-                    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-24 h-24 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
-                </div>
-                
-                <img src="https://media.giphy.com/media/L3ERvA6jWCd0qO4NdX/giphy.gif" alt="Running Dinosaur" class="absolute -bottom-8 lg:-bottom-6 xl:-bottom-8 -right-4 w-28 h-28 lg:w-20 lg:h-20 xl:w-28 xl:h-28 z-20 hover:scale-110 transition-transform drop-shadow-md">
-
-                <div class="absolute top-1/4 -left-6 text-4xl text-yellow-500 font-black animate-float-delayed select-none hidden md:block">×</div>
-                <div class="absolute bottom-1/4 -left-6 text-5xl text-emerald-400 font-black animate-float select-none hidden md:block">÷</div>
-                <div class="absolute top-1/3 -right-4 text-4xl text-indigo-400 font-black animate-float select-none hidden md:block">⚖️</div>
-
-                <div class="text-gray-700 relative z-10 space-y-3 lg:space-y-2 xl:space-y-3">
-                    <h2 class="text-xl md:text-2xl lg:text-lg xl:text-2xl font-black text-indigo-700 tracking-tight border-b-2 border-indigo-100 pb-2 lg:pb-1 xl:pb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
-                    <p class="font-bold text-gray-800 text-sm lg:text-xs xl:text-sm">Dear Parents,</p>
-                    <p class="text-sm lg:text-[13px] xl:text-sm leading-snug">In an era where smart devices are all too eager to do the thinking for us, it is no secret that our children rarely get enough raw practice with fundamental mathematical calculations. Math Sprint was meticulously designed to bridge this gap.</p>
-                    <p class="text-sm lg:text-[13px] xl:text-sm leading-snug">Think of it as a daily mental gymnasium—just without the lost water bottles and sweaty socks. Our platform is dedicated entirely to honing your child’s foundational calculation skills, training them to become notably speedier and relentlessly accurate over time.</p>
-                    <p class="text-sm lg:text-[13px] xl:text-sm leading-snug">We know schedules are tight. Each test takes exactly 10 minutes. By incorporating just two to three of these short sprints into your child's daily routine, you will see a definitive improvement in their numerical fluency.</p>
-                    <p class="text-sm lg:text-[13px] xl:text-sm leading-snug pb-2">Mathematics is a universal language required everywhere. Whether they are acing their upcoming science exams or trying to figure out if a "Buy One, Get One 50% Off" deal is actually a bargain, strong calculation skills are non-negotiable. Just a few minutes of focused practice a day is all it takes to equip them with a lifetime of mathematical confidence!</p>
+                    <div class="text-gray-700 relative z-10 space-y-3 lg:space-y-1.5">
+                        <h2 class="text-xl md:text-2xl lg:text-lg font-black text-indigo-700 tracking-tight border-b-2 border-indigo-100 pb-2 lg:pb-1 mb-4 lg:mb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
+                        <p class="font-bold text-gray-800 text-sm lg:text-[13px]">Dear Parents,</p>
+                        <p class="text-sm lg:text-[13px] leading-snug">In an era where smart devices are all too eager to do the thinking for us, it is no secret that our children rarely get enough raw practice with fundamental mathematical calculations. Math Sprint was meticulously designed to bridge this gap.</p>
+                        <p class="text-sm lg:text-[13px] leading-snug">Think of it as a daily mental gymnasium—just without the lost water bottles and sweaty socks. Our platform is dedicated entirely to honing your child’s foundational calculation skills, training them to become notably speedier and relentlessly accurate over time.</p>
+                        <p class="text-sm lg:text-[13px] leading-snug">We know schedules are tight. Each test takes exactly 10 minutes. By incorporating just two to three of these short sprints into your child's daily routine, you will see a definitive improvement in their numerical fluency.</p>
+                        <p class="text-sm lg:text-[13px] leading-snug pb-2">Mathematics is a universal language required everywhere. Whether they are acing their upcoming science exams or trying to figure out if a "Buy One, Get One 50% Off" deal is actually a bargain, strong calculation skills are non-negotiable. Just a few minutes of focused practice a day is all it takes to equip them with a lifetime of mathematical confidence!</p>
+                    </div>
                 </div>
             </div>
         </div>
