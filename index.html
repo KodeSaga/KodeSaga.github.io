@@ -71,34 +71,34 @@
 </head>
 <body id="main-body" class="bg-home-gradient text-gray-800 h-[100dvh] flex flex-col overflow-hidden transition-colors duration-500">
 
-    <div id="app-container" class="max-w-7xl mx-auto w-full p-4 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
+    <div id="app-container" class="max-w-7xl mx-auto w-full p-2 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
         
         <div id="setup-screen" class="flex-grow overflow-y-auto overflow-x-hidden w-full h-full flex flex-col">
             
-            <div class="m-auto flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-8 pb-12 lg:py-6 px-2">
+            <div class="m-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-4 pb-8 lg:py-6 px-2">
                 
                 <div class="bg-white/90 backdrop-blur-sm p-6 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
                     
                     <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
                     <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
 
-                    <h1 class="text-4xl lg:text-3xl font-black text-center mb-6 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
+                    <h1 class="text-3xl lg:text-3xl font-black text-center mb-5 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
                         Math Sprint! 🚀
                     </h1>
                     
                     <div id="core-settings">
-                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
+                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
                             <div>
-                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Problems</label>
-                                <select id="problem-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Problems</label>
+                                <select id="problem-count" class="w-full p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm text-sm">
                                     <option value="20">20 Problems</option>
                                     <option value="40" selected>40 Problems</option>
                                     <option value="60">60 Problems</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Format</label>
-                                <select id="term-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Format</label>
+                                <select id="term-count" class="w-full p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm text-sm">
                                     <option value="2">2 Numbers</option>
                                     <option value="3" selected>3 Numbers</option>
                                     <option value="4">4 Numbers</option>
@@ -106,34 +106,52 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
-                            <div>
-                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Operations</label>
-                                <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 lg:p-2 shadow-inner h-[46px] lg:h-[38px] items-center">
-                                    <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-6 h-6 lg:w-5 lg:h-5 text-pink-500 rounded accent-pink-500"> <span class="font-black text-2xl lg:text-xl text-pink-600">+</span></label>
-                                    <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-6 h-6 lg:w-5 lg:h-5 text-blue-500 rounded accent-blue-500"> <span class="font-black text-3xl lg:text-2xl text-blue-600">-</span></label>
-                                </div>
-                            </div>
-                            <div id="number-limit-container">
-                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Use numbers up to</label>
-                                <input type="number" id="number-limit" value="10" min="0" max="1000" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[46px] lg:h-[38px]">
+                        <div class="mb-4">
+                            <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Operations</label>
+                            <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-2 shadow-inner h-[40px] items-center">
+                                <label class="flex items-center gap-1 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-5 h-5 text-pink-500 rounded accent-pink-500" onchange="toggleTableLimitVisibility()"> <span class="font-black text-xl text-pink-600">+</span></label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-5 h-5 text-blue-500 rounded accent-blue-500" onchange="toggleTableLimitVisibility()"> <span class="font-black text-xl text-blue-600">-</span></label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-mul" value="*" class="w-5 h-5 text-purple-500 rounded accent-purple-500" onchange="toggleTableLimitVisibility()"> <span class="font-black text-xl text-purple-600">×</span></label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-div" value="/" class="w-5 h-5 text-orange-500 rounded accent-orange-500" onchange="toggleTableLimitVisibility()"> <span class="font-black text-xl text-orange-600">÷</span></label>
                             </div>
                         </div>
 
-                        <div class="mb-5 lg:mb-4 bg-yellow-50 p-3 lg:p-2 rounded-xl border border-yellow-200">
+                        <div id="limits-row" class="grid grid-cols-1 gap-4 lg:gap-3 mb-6 transition-all duration-300">
+                            
+                            <div id="number-limit-container" class="relative">
+                                <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Use numbers up to (+, -)</label>
+                                <input type="number" id="number-limit" value="10" min="10" max="100" 
+                                    oninput="checkNumLimit(this, 100, 'num-hint')" 
+                                    onblur="checkMin(this, 10)"
+                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <div id="num-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 100</div>
+                            </div>
+                            
+                            <div id="table-limit-container" class="relative" style="display: none;">
+                                <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Tables till (×, ÷)</label>
+                                <input type="number" id="table-limit" value="10" min="5" max="20" 
+                                    oninput="checkNumLimit(this, 20, 'table-hint')" 
+                                    onblur="checkMin(this, 5)"
+                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <div id="table-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 20</div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="mb-5 lg:mb-4 bg-yellow-50 p-2 rounded-xl border border-yellow-200">
                             <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" id="allow-negative" class="w-6 h-6 lg:w-5 lg:h-5 text-yellow-500 rounded accent-yellow-500">
-                                <span class="text-sm font-bold text-yellow-800">Allow negative answers <span class="text-yellow-600/70 font-semibold text-xs ml-1">(e.g. 2 - 5 = -3)</span></span>
+                                <input type="checkbox" id="allow-negative" class="w-5 h-5 text-yellow-500 rounded accent-yellow-500 ml-1">
+                                <span class="text-sm font-bold text-yellow-800">Allow negative answers</span>
                             </label>
                         </div>
                     </div>
 
                     <div id="action-buttons" class="grid grid-cols-2 gap-3 mt-2">
-                        <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-lg py-4 lg:py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700 shadow-sm flex flex-col items-center justify-center leading-tight">
+                        <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-lg py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700 shadow-sm flex flex-col items-center justify-center leading-tight">
                             <span>Play Online</span>
                             <span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
                         </button>
-                        <button onclick="showPrintOptions()" class="w-full bg-white text-indigo-600 font-black text-lg py-4 lg:py-3 rounded-xl hover:bg-indigo-50 transition-all duration-200 border-2 border-indigo-200 border-b-4 shadow-sm flex flex-col items-center justify-center leading-tight">
+                        <button onclick="showPrintOptions()" class="w-full bg-white text-indigo-600 font-black text-lg py-3 rounded-xl hover:bg-indigo-50 transition-all duration-200 border-2 border-indigo-200 border-b-4 shadow-sm flex flex-col items-center justify-center leading-tight">
                             <span>Print PDFs</span>
                             <span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
                         </button>
@@ -146,11 +164,11 @@
                         <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
                             <div>
                                 <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Start Test No.</label>
-                                <input type="text" inputmode="numeric" id="start-test-no" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full p-3 lg:p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
+                                <input type="text" inputmode="numeric" id="start-test-no" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Total Tests (Max 10)</label>
-                                <input type="text" inputmode="numeric" id="num-tests" value="5" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(parseInt(this.value) > 10) this.value = '10';" class="w-full p-3 lg:p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
+                                <input type="text" inputmode="numeric" id="num-tests" value="5" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(parseInt(this.value) > 10) this.value = '10';" class="w-full p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
@@ -165,14 +183,14 @@
 
                 </div>
 
-                <div class="relative bg-white px-6 pb-8 pt-12 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
-                    <div class="absolute -top-12 lg:-top-8 left-1/2 transform -translate-x-1/2 z-20">
-                        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-24 h-24 lg:w-16 lg:h-16 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
+                <div class="relative bg-white px-6 pb-6 pt-10 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
+                    <div class="absolute -top-10 lg:-top-8 left-1/2 transform -translate-x-1/2 z-20">
+                        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-20 h-20 lg:w-16 lg:h-16 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
                     </div>
-                    <img src="https://media.giphy.com/media/L3ERvA6jWCd0qO4NdX/giphy.gif" alt="Running Dinosaur" class="absolute -bottom-8 lg:-bottom-6 -right-4 w-28 h-28 lg:w-20 lg:h-20 z-20 hover:scale-110 transition-transform drop-shadow-md">
+                    <img src="https://media.giphy.com/media/L3ERvA6jWCd0qO4NdX/giphy.gif" alt="Running Dinosaur" class="absolute -bottom-8 lg:-bottom-6 -right-4 w-24 h-24 lg:w-20 lg:h-20 z-20 hover:scale-110 transition-transform drop-shadow-md">
 
-                    <div class="text-gray-700 relative z-10 space-y-3 lg:space-y-1.5">
-                        <h2 class="text-xl md:text-2xl lg:text-lg font-black text-indigo-700 tracking-tight border-b-2 border-indigo-100 pb-2 lg:pb-1 mb-4 lg:mb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
+                    <div class="text-gray-700 relative z-10 space-y-2 lg:space-y-1.5">
+                        <h2 class="text-xl lg:text-lg font-black text-indigo-700 tracking-tight border-b-2 border-indigo-100 pb-1 mb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
                         <p class="font-bold text-gray-800 text-sm lg:text-[13px]">Dear Parents,</p>
                         <p class="text-sm lg:text-[13px] leading-snug">In an era where smart devices are all too eager to do the thinking for us, it is no secret that our children rarely get enough raw practice with fundamental mathematical calculations. Math Sprint was meticulously designed to bridge this gap.</p>
                         <p class="text-sm lg:text-[13px] leading-snug">Think of it as a daily mental gymnasium—just without the lost water bottles and sweaty socks. Our platform is dedicated entirely to honing your child’s foundational calculation skills, training them to become notably speedier and relentlessly accurate over time.</p>
@@ -182,8 +200,8 @@
                 </div>
             </div>
 
-            <div class="w-full text-center py-3 px-4 bg-white/60 backdrop-blur-sm border-t border-white/60 flex-shrink-0 z-10 mt-auto">
-                <p class="text-xs md:text-sm font-bold text-indigo-900 drop-shadow-sm max-w-4xl mx-auto">
+            <div class="w-full text-center py-4 px-4 bg-white/60 backdrop-blur-sm border-t border-white/60 flex-shrink-0 z-10 mt-auto">
+                <p class="text-xs md:text-[13px] font-black text-indigo-900 drop-shadow-sm max-w-4xl mx-auto leading-relaxed">
                     This is Demo of Math Sprint App with minimal features, send feedback to the app creator directly or email kode.drama@gmail.com . You can change parameters before playing or printing. As this is just for demo preferably use on a laptop or desktop in Chrome or Firefox browser to have best experience.
                 </p>
             </div>
@@ -271,7 +289,42 @@
         const submitBtn = document.getElementById('submit-btn');
         const cancelModal = document.getElementById('cancel-modal');
 
-        // Toggle logic
+        // ================= INPUT VALIDATION LOGIC =================
+        function checkNumLimit(inputElem, maxVal, hintId) {
+            const hint = document.getElementById(hintId);
+            if (inputElem.value !== "" && parseInt(inputElem.value) > maxVal) {
+                inputElem.value = maxVal;
+                hint.classList.remove('opacity-0');
+                setTimeout(() => { hint.classList.add('opacity-0'); }, 2000);
+            }
+        }
+
+        function checkMin(inputElem, minVal) {
+            if (inputElem.value === "" || parseInt(inputElem.value) < minVal) {
+                inputElem.value = minVal;
+            }
+        }
+
+        // Dynamic Settings UI Toggle
+        function toggleTableLimitVisibility() {
+            const hasMul = document.getElementById('op-mul').checked;
+            const hasDiv = document.getElementById('op-div').checked;
+            const tableContainer = document.getElementById('table-limit-container');
+            const limitsRow = document.getElementById('limits-row');
+            
+            if (hasMul || hasDiv) {
+                tableContainer.style.display = 'block';
+                limitsRow.classList.add('grid-cols-2');
+                limitsRow.classList.remove('grid-cols-1');
+            } else {
+                tableContainer.style.display = 'none';
+                limitsRow.classList.remove('grid-cols-2');
+                limitsRow.classList.add('grid-cols-1');
+            }
+        }
+        window.addEventListener('DOMContentLoaded', toggleTableLimitVisibility);
+
+        // Print Menu Toggle logic
         function showPrintOptions() {
             document.getElementById('action-buttons').classList.add('hidden');
             document.getElementById('print-options').classList.remove('hidden');
@@ -294,40 +347,73 @@
             warningTimeout = setTimeout(() => { warningMsg.classList.add('hidden'); }, 2500);
         }
 
-        // Question Engine
-        function getGeneratedQuestions(count, terms, ops, maxLimit, allowNegative) {
+        // ================= MATH ENGINE (Multi/Div Rules & Zero Protection) =================
+        function getGeneratedQuestions(count, terms, ops, maxLimit, allowNegative, tableLimit) {
             let tempQ = [];
             for (let i = 0; i < count; i++) {
                 let attempts = 0;
                 let qAdded = false;
 
-                while (attempts < 1000 && !qAdded) {
+                while (attempts < 5000 && !qAdded) {
                     attempts++;
-                    let numbers = [];
                     let selectedOps = [];
-                    
-                    let n1 = Math.floor(Math.random() * (maxLimit + 1));
-                    numbers.push(n1);
-
                     for (let j = 1; j < terms; j++) {
                         selectedOps.push(ops[Math.floor(Math.random() * ops.length)]);
-                        numbers.push(Math.floor(Math.random() * (maxLimit + 1)));
                     }
 
-                    let expr = numbers[0].toString();
-                    let evalExpr = numbers[0].toString();
+                    let nums = [];
+                    for (let j = 0; j < terms; j++) {
+                        let isMulDiv = false;
+                        if (j > 0 && (selectedOps[j-1] === '*' || selectedOps[j-1] === '/')) isMulDiv = true;
+                        if (j < terms - 1 && (selectedOps[j] === '*' || selectedOps[j] === '/')) isMulDiv = true;
+
+                        if (isMulDiv) {
+                            if (j === 0 && selectedOps[0] === '/') {
+                                // Dividend can be up to tableLimit * 10
+                                nums.push(Math.floor(Math.random() * (tableLimit * 10)) + 1);
+                            } else if (j > 0 && selectedOps[j-1] === '/') {
+                                // Divisor strictly bounded by tableLimit (1 to N, NEVER 0)
+                                nums.push(Math.floor(Math.random() * tableLimit) + 1);
+                            } else {
+                                // Multipliers restricted to table limit
+                                nums.push(Math.floor(Math.random() * tableLimit) + 1); 
+                            }
+                        } else {
+                            // Standard Add/Sub gets number bounded by maxLimit
+                            nums.push(Math.floor(Math.random() * (maxLimit + 1))); 
+                        }
+                    }
+
+                    // Strict protection: Absolute rejection if any division by zero slips through
+                    let hasDivZero = false;
+                    for (let k = 0; k < selectedOps.length; k++) {
+                        if (selectedOps[k] === '/' && nums[k+1] === 0) hasDivZero = true;
+                    }
+                    if (hasDivZero) continue;
+
+                    let expr = nums[0].toString();
+                    let evalExpr = nums[0].toString();
                     for (let j = 0; j < selectedOps.length; j++) {
-                        expr += ` ${selectedOps[j]} ${numbers[j+1]}`;
-                        evalExpr += ` ${selectedOps[j]} ${numbers[j+1]}`;
+                        let visualOp = selectedOps[j] === '*' ? '×' : (selectedOps[j] === '/' ? '÷' : selectedOps[j]);
+                        expr += ` ${visualOp} ${nums[j+1]}`;
+                        evalExpr += ` ${selectedOps[j]} ${nums[j+1]}`;
                     }
 
                     let ans;
                     try { ans = eval(evalExpr); } catch(e) { continue; }
-                    if (!allowNegative && ans < 0) continue;
+
+                    if (!isFinite(ans)) continue; // Double check against Infinity
+                    if (ans % 1 !== 0) continue; // STRICT INTEGER CHECK: Rejects decimals/fractions
+                    if (!allowNegative && ans < 0) continue; // Only allows negative integers if checked
+
+                    // Absolute Max Final Answer Rule if Multi/Div is present
+                    let hasMulDiv = selectedOps.includes('*') || selectedOps.includes('/');
+                    if (hasMulDiv && ans > tableLimit * 10) continue;
 
                     tempQ.push({ id: i, text: expr, correctAnswer: ans, userAnswer: null });
                     qAdded = true;
                 }
+                
                 if(!qAdded) tempQ.push({ id: i, text: "0 + 0", correctAnswer: 0, userAnswer: null });
             }
             return tempQ;
@@ -342,10 +428,14 @@
             let ops = [];
             if(document.getElementById('op-add').checked) ops.push('+');
             if(document.getElementById('op-sub').checked) ops.push('-');
+            if(document.getElementById('op-mul').checked) ops.push('*');
+            if(document.getElementById('op-div').checked) ops.push('/');
             if (ops.length === 0) { alert("Please select at least one operation."); return; }
 
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
-            questions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
+            const maxLimit = parseInt(document.getElementById('number-limit').value) || 100;
+            const tableLimit = parseInt(document.getElementById('table-limit').value) || 10;
+            
+            questions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative, tableLimit);
             setColumns(2); 
             updateProgress();
             
@@ -658,12 +748,16 @@
             const problemCount = parseInt(document.getElementById('problem-count').value);
             const termCount = parseInt(document.getElementById('term-count').value);
             const allowNegative = document.getElementById('allow-negative').checked;
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
             
             let ops = [];
             if(document.getElementById('op-add').checked) ops.push('+');
             if(document.getElementById('op-sub').checked) ops.push('-');
+            if(document.getElementById('op-mul').checked) ops.push('*');
+            if(document.getElementById('op-div').checked) ops.push('/');
             if (ops.length === 0) { alert("Please select at least one operation (+ or -)."); return; }
+
+            const maxLimit = parseInt(document.getElementById('number-limit').value) || 100;
+            const tableLimit = parseInt(document.getElementById('table-limit').value) || 10;
 
             const startTestNoInput = document.getElementById('start-test-no');
             const numTestsInput = document.getElementById('num-tests');
@@ -687,7 +781,7 @@
                 let allHTML = '';
                 for (let i = 0; i < numTests; i++) {
                     const currentTestNo = startTestNo + i;
-                    const testQuestions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
+                    const testQuestions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative, tableLimit);
                     const isLastPage = (i === numTests - 1);
                     allHTML += generatePageHTML(currentTestNo, testQuestions, isLastPage);
                 }
