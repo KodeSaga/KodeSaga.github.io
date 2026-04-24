@@ -6,12 +6,11 @@
     <title>Math Sprint MVP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
+        body { font-family: 'Nunito', sans-serif; }
         
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
@@ -30,28 +29,55 @@
         .animate-float { animation: float 4s ease-in-out infinite; }
         .animate-float-delayed { animation: float-reverse 5s ease-in-out 2s infinite; }
 
-        /* Distraction-Free Testing Pattern */
+        /* Backgrounds */
         .bg-math-pattern {
             background-color: #f8fafc;
             background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
             background-size: 30px 30px;
         }
+        .bg-home-gradient { background: linear-gradient(135deg, #cffafe 0%, #fae8ff 50%, #fef08a 100%); }
+        .animate-fade-in { animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Colorful Homepage Gradient */
-        .bg-home-gradient {
-            background: linear-gradient(135deg, #cffafe 0%, #fae8ff 50%, #fef08a 100%);
+        /* =========================================================================
+           CRITICAL FIX: @page MUST be completely outside of @media print.
+           ========================================================================= */
+        @page { 
+            size: landscape; 
+            margin: 10mm; 
+        }
+
+        /* PRINT SPECIFIC STYLES */
+        @media print {
+            body { 
+                background: white !important; 
+                color: black !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+                height: auto !important; 
+                overflow: visible !important;
+            }
+            #app-container { display: none !important; }
+            #print-area { display: block !important; }
+            
+            .print-page { 
+                page-break-after: always;
+                width: 100%; 
+                height: 190mm;
+                overflow: hidden;
+            }
         }
     </style>
 </head>
 <body id="main-body" class="bg-home-gradient text-gray-800 h-[100dvh] flex flex-col overflow-hidden transition-colors duration-500">
 
-    <div class="max-w-7xl mx-auto w-full p-4 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
+    <div id="app-container" class="max-w-7xl mx-auto w-full p-4 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
         
         <div id="setup-screen" class="flex-grow overflow-y-auto overflow-x-hidden w-full h-full flex flex-col">
             
             <div class="m-auto flex flex-col lg:flex-row gap-12 lg:gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-8 pb-20 lg:py-6 px-2">
                 
-                <div class="bg-white/90 backdrop-blur-sm p-8 md:p-10 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
+                <div class="bg-white/90 backdrop-blur-sm p-8 md:p-8 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
                     
                     <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
                     <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
@@ -60,57 +86,89 @@
                         Math Sprint! 🚀
                     </h1>
                     
-                    <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
-                        <div>
-                            <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Problems</label>
-                            <select id="problem-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                                <option value="20">20 Problems</option>
-                                <option value="40">40 Problems</option>
-                                <option value="60">60 Problems</option>
-                            </select>
+                    <div id="core-settings">
+                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Problems</label>
+                                <select id="problem-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                    <option value="20">20 Problems</option>
+                                    <option value="40">40 Problems</option>
+                                    <option value="60">60 Problems</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Format</label>
+                                <select id="term-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
+                                    <option value="2">2 Numbers</option>
+                                    <option value="3">3 Numbers</option>
+                                    <option value="4">4 Numbers</option>
+                                </select>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Format</label>
-                            <select id="term-count" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                                <option value="2">2 Numbers</option>
-                                <option value="3">3 Numbers</option>
-                                <option value="4">4 Numbers</option>
-                            </select>
+
+                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-5 lg:mb-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Operations</label>
+                                <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 lg:p-2 shadow-inner h-[46px] lg:h-[38px] items-center">
+                                    <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-6 h-6 lg:w-5 lg:h-5 text-pink-500 rounded accent-pink-500"> <span class="font-black text-2xl lg:text-xl text-pink-600">+</span></label>
+                                    <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-6 h-6 lg:w-5 lg:h-5 text-blue-500 rounded accent-blue-500"> <span class="font-black text-3xl lg:text-2xl text-blue-600">-</span></label>
+                                </div>
+                            </div>
+                            <div id="number-limit-container">
+                                <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Use numbers up to</label>
+                                <input type="number" id="number-limit" value="10" min="0" max="1000" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[46px] lg:h-[38px]">
+                            </div>
+                        </div>
+
+                        <div class="mb-5 lg:mb-4 bg-yellow-50 p-3 lg:p-2 rounded-xl border border-yellow-200">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="allow-negative" class="w-6 h-6 lg:w-5 lg:h-5 text-yellow-500 rounded accent-yellow-500">
+                                <span class="text-sm font-bold text-yellow-800">Allow negative answers <span class="text-yellow-600/70 font-semibold text-xs ml-1">(e.g. 2 - 5 = -3)</span></span>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="mb-5 lg:mb-4">
-                        <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Operations</label>
-                        <div class="flex justify-around bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 lg:p-2 shadow-inner">
-                            <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-add" value="+" checked class="w-6 h-6 lg:w-5 lg:h-5 text-pink-500 rounded accent-pink-500"> <span class="font-black text-2xl lg:text-xl text-pink-600">+</span></label>
-                            <label class="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform"><input type="checkbox" id="op-sub" value="-" checked class="w-6 h-6 lg:w-5 lg:h-5 text-blue-500 rounded accent-blue-500"> <span class="font-black text-3xl lg:text-2xl text-blue-600">-</span></label>
+                    <div id="action-buttons" class="grid grid-cols-2 gap-3 mt-2">
+                        <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-lg py-4 lg:py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700 shadow-sm flex flex-col items-center justify-center leading-tight">
+                            <span>Play Online</span>
+                            <span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
+                        </button>
+                        <button onclick="showPrintOptions()" class="w-full bg-white text-indigo-600 font-black text-lg py-4 lg:py-3 rounded-xl hover:bg-indigo-50 transition-all duration-200 border-2 border-indigo-200 border-b-4 shadow-sm flex flex-col items-center justify-center leading-tight">
+                            <span>Print PDFs</span>
+                            <span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
+                        </button>
+                    </div>
+
+                    <div id="print-options" class="hidden flex-col mt-2 pt-4 border-t-2 border-indigo-50 animate-fade-in">
+                        <h3 class="font-black text-indigo-800 mb-3 flex items-center gap-2 text-sm">
+                            <span>🖨️ PDF Settings</span>
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
+                            <div>
+                                <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Start Test No.</label>
+                                <input type="text" inputmode="numeric" id="start-test-no" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full p-3 lg:p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Total Tests (Max 10)</label>
+                                <input type="text" inputmode="numeric" id="num-tests" value="5" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(parseInt(this.value) > 10) this.value = '10';" class="w-full p-3 lg:p-2 border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-black text-gray-700 shadow-sm text-center text-lg">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="hidePrintOptions()" class="w-full bg-gray-100 text-gray-600 font-black text-lg py-3 rounded-xl hover:bg-gray-200 transition-all border-b-4 border-gray-300 shadow-sm">
+                                Cancel
+                            </button>
+                            <button id="generate-pdf-btn" onclick="executePrint()" class="w-full bg-indigo-600 text-white font-black text-lg py-3 rounded-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 shadow-sm flex items-center justify-center">
+                                <span id="generate-btn-text">Generate</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div id="number-limit-container" class="mb-5 lg:mb-4">
-                        <label class="block text-sm font-bold mb-2 lg:mb-1 text-indigo-900">Max Number Limit</label>
-                        <input type="number" id="number-limit" value="10" min="1" max="100" class="w-full p-3 lg:p-2 lg:text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm">
-                        <p class="text-xs text-gray-500 mt-1 font-semibold">Highest number for additions and subtractions.</p>
-                    </div>
-
-                    <div class="mb-8 lg:mb-5 bg-yellow-50 p-3 lg:p-2 rounded-xl border border-yellow-200">
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="allow-negative" class="w-6 h-6 lg:w-5 lg:h-5 text-yellow-500 rounded accent-yellow-500">
-                            <span class="text-sm font-bold text-yellow-800">Allow negative answers <br><span class="text-yellow-600/70 font-semibold text-xs">(e.g. 2 - 5 = -3)</span></span>
-                        </label>
-                    </div>
-
-                    <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-xl lg:text-lg py-4 lg:py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700">
-                        GO! (10:00)
-                    </button>
                 </div>
 
                 <div class="relative bg-white px-6 pb-8 pt-12 md:px-10 md:pb-10 md:pt-16 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
-                    
                     <div class="absolute -top-12 lg:-top-8 left-1/2 transform -translate-x-1/2 z-20">
                         <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-24 h-24 lg:w-16 lg:h-16 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
                     </div>
-                    
                     <img src="https://media.giphy.com/media/L3ERvA6jWCd0qO4NdX/giphy.gif" alt="Running Dinosaur" class="absolute -bottom-8 lg:-bottom-6 -right-4 w-28 h-28 lg:w-20 lg:h-20 z-20 hover:scale-110 transition-transform drop-shadow-md">
 
                     <div class="absolute top-1/4 -left-6 text-4xl text-yellow-500 font-black animate-float-delayed select-none hidden md:block">×</div>
@@ -130,41 +188,29 @@
         </div>
 
         <div id="game-screen" class="hidden flex-row h-full w-full gap-3 md:gap-6 z-10 relative">
-            
             <div class="w-12 md:w-20 flex-shrink-0 flex flex-col items-center justify-end bg-white pb-8 md:pb-6 pt-4 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
                 <div class="flex-grow w-3 md:w-6 bg-gray-100 rounded-full overflow-hidden relative mb-4 shadow-inner">
                     <div id="progress-fill" class="absolute bottom-0 left-0 w-full bg-emerald-400 transition-all duration-300" style="height: 0%;"></div>
                 </div>
                 <div id="progress-text" class="text-[10px] md:text-sm font-black text-gray-500 tracking-tight">0/20</div>
             </div>
-
             <div class="flex-grow flex flex-col h-full overflow-hidden">
                 <div class="flex justify-between items-center mb-4 bg-white p-3 md:p-4 rounded-2xl shadow-sm border-2 border-gray-200 flex-shrink-0">
                     <div class="text-xl md:text-3xl font-black font-mono text-indigo-600 tracking-widest bg-indigo-50 px-3 py-1 rounded-xl" id="timer-display">10:00</div>
                     <div class="flex items-center gap-2 md:gap-4">
-                        
                         <div class="hidden lg:flex bg-gray-100 p-1 rounded-xl">
                             <button onclick="setColumns(2)" id="btn-col-2" class="px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors">2 Cols</button>
                             <button onclick="setColumns(3)" id="btn-col-3" class="px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors">3 Cols</button>
                             <button onclick="setColumns(4)" id="btn-col-4" class="px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors">4 Cols</button>
                         </div>
-                        
-                        <button onclick="showCancelModal()" class="bg-red-50 text-red-500 hover:bg-red-100 border-2 border-red-200 w-10 h-10 md:w-11 md:h-11 rounded-xl font-black transition-all flex items-center justify-center text-lg shadow-sm" title="Cancel Test">
-                            ✖
-                        </button>
-
-                        <button onclick="submitSprint()" id="submit-btn" class="bg-emerald-500 text-white px-4 md:px-8 py-2 md:py-2.5 rounded-xl font-black hover:bg-emerald-600 transition shadow-md border-b-4 border-emerald-700 text-sm md:text-base">
-                            Submit
-                        </button>
+                        <button onclick="showCancelModal()" class="bg-red-50 text-red-500 hover:bg-red-100 border-2 border-red-200 w-10 h-10 md:w-11 md:h-11 rounded-xl font-black transition-all flex items-center justify-center text-lg shadow-sm" title="Cancel Test">✖</button>
+                        <button onclick="submitSprint()" id="submit-btn" class="bg-emerald-500 text-white px-4 md:px-8 py-2 md:py-2.5 rounded-xl font-black hover:bg-emerald-600 transition shadow-md border-b-4 border-emerald-700 text-sm md:text-base">Submit</button>
                     </div>
                 </div>
-
                 <div id="warning-msg" class="hidden bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm transition-all duration-300">⚠️ Please type numbers only!</div>
                 <div id="error-msg" class="hidden bg-red-100 text-red-600 border border-red-200 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm">Oops! Please answer all questions before submitting.</div>
-
                 <div class="flex-grow overflow-y-auto pb-24 pr-1 md:pr-2">
-                    <div id="questions-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                        </div>
+                    <div id="questions-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"></div>
                 </div>
             </div>
         </div>
@@ -173,20 +219,13 @@
             <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border-4 border-indigo-100 w-full max-w-lg text-center relative overflow-hidden mx-4">
                 <div class="absolute -top-10 -left-10 text-6xl opacity-20">🎉</div>
                 <div class="absolute -bottom-10 -right-10 text-6xl opacity-20">🌟</div>
-                
                 <h2 id="result-title" class="text-3xl md:text-4xl font-black mb-2 text-indigo-800">Sprint Complete!</h2>
                 <p class="text-gray-500 mb-8 font-bold text-sm md:text-base" id="time-taken-display"></p>
-                
                 <div class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-indigo-600 mb-2 drop-shadow-sm" id="score-display"></div>
                 <p class="text-xl md:text-2xl font-bold text-emerald-500 mb-8 bg-emerald-50 inline-block px-4 py-1 rounded-full" id="percentage-display"></p>
-
                 <div class="flex flex-col gap-4">
-                    <button onclick="showReview()" id="review-btn" class="w-full bg-yellow-100 text-yellow-800 font-black py-4 rounded-2xl hover:bg-yellow-200 transition border-2 border-yellow-300">
-                        Review Incorrect Answers
-                    </button>
-                    <button onclick="resetGame()" class="w-full bg-indigo-600 text-white font-black py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg border-b-4 border-indigo-800">
-                        Play Again!
-                    </button>
+                    <button onclick="showReview()" id="review-btn" class="w-full bg-yellow-100 text-yellow-800 font-black py-4 rounded-2xl hover:bg-yellow-200 transition border-2 border-yellow-300">Review Incorrect Answers</button>
+                    <button onclick="resetGame()" class="w-full bg-indigo-600 text-white font-black py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg border-b-4 border-indigo-800">Play Again!</button>
                 </div>
             </div>
         </div>
@@ -202,19 +241,20 @@
                 </div>
             </div>
         </div>
-
     </div>
 
+    <div id="pdf-export-container" class="fixed top-0 left-[-9999px] bg-white text-black z-[-1]" style="width: 297mm;"></div>
+
     <script>
-        // Game State Variables
+        // Core Game Variables
         let questions = [];
         let timerInterval;
         let timeLeft = 600; 
-        let currentColumns = 2; // Default to 2 for wider screens initially
+        let currentColumns = 2; 
         let isReviewMode = false;
         let warningTimeout = null;
 
-        // DOM Elements
+        // DOM
         const mainBody = document.getElementById('main-body');
         const screens = {
             setup: document.getElementById('setup-screen'),
@@ -228,75 +268,32 @@
         const submitBtn = document.getElementById('submit-btn');
         const cancelModal = document.getElementById('cancel-modal');
 
-        // Modal Logic
-        function showCancelModal() {
-            cancelModal.classList.remove('hidden');
+        // Toggle logic
+        function showPrintOptions() {
+            document.getElementById('action-buttons').classList.add('hidden');
+            document.getElementById('print-options').classList.remove('hidden');
+            document.getElementById('print-options').classList.add('flex');
         }
 
-        function hideCancelModal() {
-            cancelModal.classList.add('hidden');
+        function hidePrintOptions() {
+            document.getElementById('print-options').classList.add('hidden');
+            document.getElementById('print-options').classList.remove('flex');
+            document.getElementById('action-buttons').classList.remove('hidden');
         }
 
-        function confirmCancel() {
-            hideCancelModal();
-            resetGame(); 
-        }
+        function showCancelModal() { cancelModal.classList.remove('hidden'); }
+        function hideCancelModal() { cancelModal.classList.add('hidden'); }
+        function confirmCancel() { hideCancelModal(); resetGame(); }
 
-        // Warning Logic
         function triggerNumberWarning() {
             warningMsg.classList.remove('hidden');
             clearTimeout(warningTimeout);
-            warningTimeout = setTimeout(() => {
-                warningMsg.classList.add('hidden');
-            }, 2500);
+            warningTimeout = setTimeout(() => { warningMsg.classList.add('hidden'); }, 2500);
         }
 
-        // Core Game Logic
-        function startSprint() {
-            isReviewMode = false; 
-
-            const problemCount = parseInt(document.getElementById('problem-count').value);
-            const termCount = parseInt(document.getElementById('term-count').value);
-            const allowNegative = document.getElementById('allow-negative').checked;
-            
-            let ops = [];
-            if(document.getElementById('op-add').checked) ops.push('+');
-            if(document.getElementById('op-sub').checked) ops.push('-');
-
-            if (ops.length === 0) {
-                alert("Please select at least one operation (+ or -).");
-                return;
-            }
-
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
-            
-            generateQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
-            setColumns(2); // Initialize grid to default 2 columns for wider screens
-            updateProgress();
-            
-            // Switch themes & screens
-            mainBody.classList.remove('bg-home-gradient');
-            mainBody.classList.add('bg-math-pattern');
-            
-            screens.setup.classList.add('hidden');
-            screens.game.classList.remove('hidden');
-            screens.game.classList.add('flex');
-            
-            timeLeft = 600;
-            updateTimerDisplay();
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    autoSubmitSprint();
-                }
-            }, 1000);
-        }
-
-        function generateQuestions(count, terms, ops, maxLimit, allowNegative) {
-            questions = [];
+        // Question Engine
+        function getGeneratedQuestions(count, terms, ops, maxLimit, allowNegative) {
+            let tempQ = [];
             for (let i = 0; i < count; i++) {
                 let attempts = 0;
                 let qAdded = false;
@@ -305,93 +302,101 @@
                     attempts++;
                     let numbers = [];
                     let selectedOps = [];
-
-                    let n1 = Math.floor(Math.random() * maxLimit) + 1;
+                    
+                    let n1 = Math.floor(Math.random() * (maxLimit + 1));
                     numbers.push(n1);
 
                     for (let j = 1; j < terms; j++) {
                         selectedOps.push(ops[Math.floor(Math.random() * ops.length)]);
-                        numbers.push(Math.floor(Math.random() * maxLimit) + 1);
+                        numbers.push(Math.floor(Math.random() * (maxLimit + 1)));
                     }
 
                     let expr = numbers[0].toString();
                     let evalExpr = numbers[0].toString();
-                    
                     for (let j = 0; j < selectedOps.length; j++) {
-                        let op = selectedOps[j];
-                        let num = numbers[j+1];
-                        expr += ` ${op} ${num}`;
-                        evalExpr += ` ${op} ${num}`;
+                        expr += ` ${selectedOps[j]} ${numbers[j+1]}`;
+                        evalExpr += ` ${selectedOps[j]} ${numbers[j+1]}`;
                     }
 
                     let ans;
                     try { ans = eval(evalExpr); } catch(e) { continue; }
-
                     if (!allowNegative && ans < 0) continue;
 
-                    questions.push({ id: i, text: expr, correctAnswer: ans, userAnswer: null });
+                    tempQ.push({ id: i, text: expr, correctAnswer: ans, userAnswer: null });
                     qAdded = true;
                 }
-                
-                if(!qAdded) {
-                    questions.push({ id: i, text: "1 + 1", correctAnswer: 2, userAnswer: null });
-                }
+                if(!qAdded) tempQ.push({ id: i, text: "0 + 0", correctAnswer: 0, userAnswer: null });
             }
+            return tempQ;
+        }
+
+        // Online Interactive Game Logic
+        function startSprint() {
+            isReviewMode = false; 
+            const problemCount = parseInt(document.getElementById('problem-count').value);
+            const termCount = parseInt(document.getElementById('term-count').value);
+            const allowNegative = document.getElementById('allow-negative').checked;
+            let ops = [];
+            if(document.getElementById('op-add').checked) ops.push('+');
+            if(document.getElementById('op-sub').checked) ops.push('-');
+            if (ops.length === 0) { alert("Please select at least one operation."); return; }
+
+            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
+            questions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
+            setColumns(2); 
+            updateProgress();
+            
+            mainBody.classList.remove('bg-home-gradient');
+            mainBody.classList.add('bg-math-pattern');
+            screens.setup.classList.add('hidden');
+            screens.game.classList.remove('hidden');
+            screens.game.classList.add('flex');
+            
+            timeLeft = 600;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmitSprint(); }
+            }, 1000);
         }
 
         function renderQuestions() {
             grid.innerHTML = '';
-            
-            // 1. Universal Smart Scaling: Find the longest question text in the entire set
             const maxLen = Math.max(...questions.map(q => q.text.length));
-            
-            // 2. Assign ONE universal font size class for all questions based on max length & columns
             let sharedFontClass = '';
             let inputWidth = '';
 
             if (currentColumns === 4) {
-                inputWidth = 'w-14 lg:w-16'; // Slimmer input box to save space
-                if (maxLen > 16) sharedFontClass = 'text-[9px] sm:text-[10px] md:text-xs lg:text-xs';
-                else if (maxLen > 11) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-sm';
-                else sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-base';
+                inputWidth = 'w-14 lg:w-16'; 
+                if (maxLen >= 20) sharedFontClass = 'text-[9px] sm:text-[10px] md:text-xs lg:text-sm tracking-tighter';
+                else if (maxLen >= 15) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-base tracking-tight';
+                else sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-xl';
             } else if (currentColumns === 3) {
                 inputWidth = 'w-16 lg:w-20';
-                if (maxLen > 16) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-sm';
-                else if (maxLen > 11) sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-base';
-                else sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-lg';
-            } else { // 1 or 2 columns
+                if (maxLen >= 20) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-lg tracking-tighter';
+                else if (maxLen >= 15) sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-xl tracking-tight';
+                else sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-2xl';
+            } else { 
                 inputWidth = 'w-20 lg:w-24';
-                if (maxLen > 16) sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-xl';
-                else if (maxLen > 11) sharedFontClass = 'text-base sm:text-lg md:text-xl lg:text-2xl';
-                else sharedFontClass = 'text-lg sm:text-xl md:text-2xl lg:text-3xl';
+                if (maxLen >= 20) sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-2xl tracking-tight';
+                else if (maxLen >= 15) sharedFontClass = 'text-base sm:text-lg md:text-xl lg:text-3xl tracking-tight';
+                else sharedFontClass = 'text-lg sm:text-xl md:text-2xl lg:text-4xl';
             }
 
             questions.forEach((q, index) => {
                 const item = document.createElement('div');
-                // Removed overflow-hidden from here to prevent aggressive clipping, added flex to perfectly align
                 item.className = 'bg-white p-2 md:p-3 lg:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors w-full gap-2';
 
                 let inputHTML = '';
                 if (isReviewMode) {
                     const isCorrect = q.userAnswer === q.correctAnswer;
-                    inputHTML = `
-                        <div class="flex flex-col items-end flex-shrink-0">
-                            <input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" 
-                                class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">
-                            ${!isCorrect ? `<span class="text-[9px] md:text-xs text-emerald-600 mt-1 font-black bg-emerald-50 px-1.5 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}
-                        </div>`;
+                    inputHTML = `<div class="flex flex-col items-end flex-shrink-0"><input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">${!isCorrect ? `<span class="text-[9px] md:text-xs text-emerald-600 mt-1 font-black bg-emerald-50 px-1.5 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}</div>`;
                 } else {
-                    inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" oninput="saveAnswer(${index}, this)" 
-                                class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
+                    inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" oninput="saveAnswer(${index}, this)" class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
                 }
 
-                // whitespace-nowrap forces single line, text-right pushes text neatly against the input box
-                item.innerHTML = `
-                    <span class="whitespace-nowrap flex-grow text-right ${sharedFontClass} tracking-tight mr-1">
-                        ${q.text} = 
-                    </span>
-                    ${inputHTML}
-                `;
+                item.innerHTML = `<span class="whitespace-nowrap flex-grow text-right ${sharedFontClass} mr-1">${q.text} = </span>${inputHTML}`;
                 grid.appendChild(item);
             });
         }
@@ -399,69 +404,36 @@
         function saveAnswer(index, inputElement) {
             const rawValue = inputElement.value;
             const allowNegative = document.getElementById('allow-negative').checked;
-            
-            // Strip out everything that isn't a digit or a minus sign
             let sanitized = rawValue.replace(/[^0-9-]/g, '');
-            
-            if (!allowNegative) {
-                sanitized = sanitized.replace(/-/g, '');
-            } else {
+            if (!allowNegative) { sanitized = sanitized.replace(/-/g, ''); } 
+            else {
                 const hasMinus = sanitized.startsWith('-');
                 sanitized = sanitized.replace(/-/g, '');
-                if (hasMinus) {
-                    sanitized = '-' + sanitized;
-                }
+                if (hasMinus) sanitized = '-' + sanitized;
             }
 
-            if (rawValue !== sanitized) {
-                inputElement.value = sanitized;
-                triggerNumberWarning();
-            }
-
+            if (rawValue !== sanitized) { inputElement.value = sanitized; triggerNumberWarning(); }
             questions[index].userAnswer = (sanitized === "" || sanitized === "-") ? null : parseInt(sanitized);
-            
             errorMsg.classList.add('hidden');
             updateProgress();
         }
 
         function updateProgress() {
             const answeredCount = questions.filter(q => q.userAnswer !== null).length;
-            const totalCount = questions.length;
-            const percentage = (answeredCount / totalCount) * 100;
-            
-            document.getElementById('progress-fill').style.height = `${percentage}%`;
-            document.getElementById('progress-text').textContent = `${answeredCount}/${totalCount}`;
+            document.getElementById('progress-fill').style.height = `${(answeredCount / questions.length) * 100}%`;
+            document.getElementById('progress-text').textContent = `${answeredCount}/${questions.length}`;
         }
 
         function setColumns(cols) {
             currentColumns = cols;
-            
-            // Hardcoded Tailwind mappings to ensure the browser processes them correctly
-            let colClass = '';
-            if (cols === 2) colClass = 'lg:grid-cols-2';
-            else if (cols === 3) colClass = 'lg:grid-cols-3';
-            else if (cols === 4) colClass = 'lg:grid-cols-4';
-
-            // grid-cols-1 forces Mobile into 1 column. 
-            // sm:grid-cols-2 forces tablets into 2 columns.
-            // lg:grid-cols-X dictates the desktop/laptop layout based on user selection.
+            let colClass = cols === 2 ? 'lg:grid-cols-2' : (cols === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4');
             grid.className = `grid grid-cols-1 sm:grid-cols-2 ${colClass} gap-3 md:gap-4`;
             
-            // Update button styles safely
             [2, 3, 4].forEach(c => {
                 const btn = document.getElementById(`btn-col-${c}`);
-                if (btn) {
-                    if (c === cols) {
-                        btn.className = 'px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors';
-                    } else {
-                        btn.className = 'px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors';
-                    }
-                }
+                if (btn) btn.className = (c === cols) ? 'px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors' : 'px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors';
             });
-            
-            if (questions.length > 0) {
-                renderQuestions(); // Re-render to trigger smart font scaling when columns change!
-            }
+            if (questions.length > 0) renderQuestions(); 
         }
 
         function updateTimerDisplay() {
@@ -479,48 +451,31 @@
 
         function submitSprint() {
             const allAnswered = questions.every(q => q.userAnswer !== null);
-            if (!allAnswered) {
-                errorMsg.classList.remove('hidden');
-                return;
-            }
+            if (!allAnswered) { errorMsg.classList.remove('hidden'); return; }
             processResults();
         }
-
-        function autoSubmitSprint() {
-            processResults();
-        }
+        function autoSubmitSprint() { processResults(); }
 
         function processResults() {
             clearInterval(timerInterval);
-            
             let correctCount = 0;
-            questions.forEach(q => {
-                if (q.userAnswer === q.correctAnswer) correctCount++;
-            });
+            questions.forEach(q => { if (q.userAnswer === q.correctAnswer) correctCount++; });
 
             const percentage = (correctCount / questions.length) * 100;
             const timeTaken = 600 - timeLeft;
-            const mins = Math.floor(timeTaken / 60);
-            const secs = timeTaken % 60;
-
+            
             document.getElementById('score-display').textContent = `${correctCount} / ${questions.length}`;
             document.getElementById('percentage-display').textContent = `${percentage.toFixed(0)}% Accuracy`;
-            document.getElementById('time-taken-display').textContent = `Time taken: ${mins}m ${secs}s`;
+            document.getElementById('time-taken-display').textContent = `Time taken: ${Math.floor(timeTaken / 60)}m ${timeTaken % 60}s`;
 
             screens.game.classList.remove('flex');
             screens.game.classList.add('hidden');
             screens.result.classList.remove('hidden');
             screens.result.classList.add('flex');
 
-            if (percentage >= 90) {
-                document.getElementById('result-title').textContent = "Incredible Job! 🏆";
-                triggerConfetti();
-            } else if (percentage >= 70) {
-                document.getElementById('result-title').textContent = "Great Effort! 👍";
-            } else {
-                document.getElementById('result-title').textContent = "Good Practice! 💪";
-            }
-
+            if (percentage >= 90) { document.getElementById('result-title').textContent = "Incredible Job! 🏆"; triggerConfetti(); } 
+            else if (percentage >= 70) document.getElementById('result-title').textContent = "Great Effort! 👍";
+            else document.getElementById('result-title').textContent = "Good Practice! 💪";
             document.getElementById('review-btn').style.display = percentage === 100 ? 'none' : 'block';
         }
 
@@ -530,12 +485,10 @@
             screens.result.classList.add('hidden');
             screens.game.classList.remove('hidden');
             screens.game.classList.add('flex');
-            
             submitBtn.style.display = 'none';
             timerDisplay.textContent = "REVIEW MODE";
             timerDisplay.classList.remove('text-red-500', 'bg-red-50', 'text-indigo-600');
             timerDisplay.classList.add('text-gray-500', 'bg-gray-100');
-            
             renderQuestions();
             
             const backBtn = document.createElement('button');
@@ -553,39 +506,210 @@
         function resetGame() {
             clearInterval(timerInterval);
             isReviewMode = false; 
-
-            // Revert Theme
             mainBody.classList.remove('bg-math-pattern');
             mainBody.classList.add('bg-home-gradient');
-
             screens.result.classList.remove('flex');
             screens.result.classList.add('hidden');
             screens.game.classList.remove('flex');
             screens.game.classList.add('hidden');
             screens.setup.classList.remove('hidden');
-            
             submitBtn.style.display = 'block';
             errorMsg.classList.add('hidden');
             warningMsg.classList.add('hidden');
+            hidePrintOptions(); 
         }
 
         function triggerConfetti() {
             var duration = 4 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 60 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: Math.random(), y: Math.random() - 0.2 },
-                    colors: ['#fce7f3', '#fbcfe8', '#f9a8d4', '#818cf8', '#c084fc']
-                }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors: ['#fce7f3', '#fbcfe8', '#f9a8d4', '#818cf8', '#c084fc'] }));
             }, 250);
+        }
+
+        // ================= DIRECT PDF DOWNLOAD ENGINE =================
+        
+        function getQuestionColumns(qList) {
+            let total = qList.length;
+            if (total === 20) {
+                return [qList.slice(0, 7), qList.slice(7, 14), qList.slice(14, 20)];
+            } else if (total === 40) {
+                return [qList.slice(0, 14), qList.slice(14, 27), qList.slice(27, 40)];
+            } else {
+                let res = [];
+                let size = Math.ceil(total / 4);
+                for(let i=0; i<4; i++) res.push(qList.slice(i*size, (i+1)*size));
+                return res;
+            }
+        }
+
+        function splitArray(arr, cols) {
+            let res = [];
+            let size = Math.ceil(arr.length / cols);
+            for(let i=0; i<cols; i++) res.push(arr.slice(i*size, (i+1)*size));
+            return res;
+        }
+
+        function generatePageHTML(testNum, qList, isLastPage) {
+            let colsArray = getQuestionColumns(qList);
+            let numCols = colsArray.length;
+            let colLetters = ['A', 'B', 'C', 'D'];
+            
+            let colorSky = '#0284c7'; 
+            
+            let maxLen = Math.max(...qList.map(q => q.text.length));
+            let printFontClass = 'text-[16px]';
+            let boxWidth = '40px'; 
+            
+            if (numCols === 4) { // 60 questions
+                if (maxLen >= 17) { printFontClass = 'text-[12px] tracking-tighter'; boxWidth = '25px'; }
+                else if (maxLen >= 14) { printFontClass = 'text-[13px] tracking-tighter'; boxWidth = '30px'; } 
+                else if (maxLen >= 12) { printFontClass = 'text-[14px] tracking-tight'; boxWidth = '35px'; }
+                else { printFontClass = 'text-[15px]'; boxWidth = '40px'; }
+            } else { // 3 Columns (20 or 40 questions)
+                if (maxLen >= 17) { printFontClass = 'text-[14px] tracking-tighter'; boxWidth = '35px'; }
+                else if (maxLen >= 14) { printFontClass = 'text-[15px] tracking-tighter'; boxWidth = '40px'; } 
+                else if (maxLen >= 12) { printFontClass = 'text-[16px] tracking-tight'; boxWidth = '45px'; }
+                else { printFontClass = 'text-[18px]'; boxWidth = '50px'; }
+            }
+
+            let gapYClass = qList.length > 40 ? 'gap-y-1.5' : 'gap-y-3';
+
+            let gridHTML = '<div class="flex w-full gap-[8mm] justify-between mt-3">';
+            
+            colsArray.forEach((colGroup, colIndex) => {
+                gridHTML += `<div class="flex-1 flex flex-col ${gapYClass} overflow-hidden px-1">`; 
+                gridHTML += `<div class="text-center font-black tracking-wider mb-2 text-[14px]" style="color: ${colorSky} !important;">COLUMN ${colLetters[colIndex]}</div>`;
+                
+                colGroup.forEach((q) => {
+                    let globalIndex = qList.indexOf(q) + 1;
+                    
+                    gridHTML += `
+                        <div class="flex items-end ${printFontClass} font-black font-sans text-gray-800 whitespace-nowrap w-full mb-1">
+                            <div style="min-width: 20px; color: ${colorSky} !important;" class="text-left flex-shrink-0">${globalIndex})</div>
+                            <div class="text-left flex-shrink-0">${q.text} =</div>
+                            <div style="border-bottom: 2px solid #1f2937; width: ${boxWidth}; height: 0.9em; margin-left: 6px; margin-bottom: 2px; flex-shrink: 0;"></div>
+                        </div>
+                    `;
+                });
+                gridHTML += `</div>`;
+            });
+            gridHTML += '</div>';
+
+            let ansCols = qList.length > 40 ? 4 : (qList.length > 20 ? 3 : 2);
+            let ansColsArray = splitArray(qList, ansCols);
+            let ansHTML = `<div class="flex w-full gap-2 text-[10px] font-black text-gray-800 mt-2">`;
+            
+            ansColsArray.forEach((colGroup) => {
+                ansHTML += `<div class="flex-1 flex flex-col gap-[2px]">`;
+                colGroup.forEach((q) => {
+                    let globalIndex = qList.indexOf(q) + 1;
+                    ansHTML += `<div>${globalIndex}: <span style="color: #4338ca !important;">${q.correctAnswer}</span></div>`;
+                });
+                ansHTML += `</div>`;
+            });
+            ansHTML += '</div>';
+
+            const pageBreakCSS = isLastPage ? '' : 'page-break-after: always;';
+
+            return `
+            <div class="pdf-page" style="width: 297mm; height: 209mm; padding: 10mm; box-sizing: border-box; display: flex; flex-direction: row; background: white; ${pageBreakCSS}">
+                
+                <div style="width: 80%; padding-right: 10mm; display: flex; flex-direction: column; height: 100%;">
+                    <h1 class="text-2xl font-black text-center text-sky-700 tracking-wide uppercase mb-1">10 MINUTE MATH SPRINT - TEST NO. ${testNum}</h1>
+                    
+                    <div class="flex justify-between font-bold text-gray-700 text-sm border-b-2 border-gray-200 pb-1 mb-2 px-2">
+                        <span>Name: ______________________</span>
+                        <span>Date: _______________</span>
+                        <span>Time Started: ___:___</span>
+                        <span>Time Finished: ___:___</span>
+                    </div>
+
+                    <div class="flex-grow flex items-start w-full">
+                        ${gridHTML}
+                    </div>
+                </div>
+
+                <div style="width: 20%; padding-left: 1rem; border-left: 2px dashed #d1d5db; display: flex; flex-direction: column; position: relative; height: 100%;">
+                    <div class="text-center font-black text-gray-800 mb-2 mt-4">
+                        <span class="block uppercase tracking-widest text-[9px] mb-0.5 text-gray-500">Fold or Cut</span>
+                        <span class="block text-sm mb-0.5 text-gray-300">👇</span>
+                        <span class="block uppercase underline text-sm tracking-wider">Answers</span>
+                    </div>
+                    <div class="flex-grow w-full">
+                        ${ansHTML}
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        async function executePrint() {
+            const btnText = document.getElementById('generate-btn-text');
+            const btn = document.getElementById('generate-pdf-btn');
+            
+            const problemCount = parseInt(document.getElementById('problem-count').value);
+            const termCount = parseInt(document.getElementById('term-count').value);
+            const allowNegative = document.getElementById('allow-negative').checked;
+            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
+            
+            let ops = [];
+            if(document.getElementById('op-add').checked) ops.push('+');
+            if(document.getElementById('op-sub').checked) ops.push('-');
+            if (ops.length === 0) { alert("Please select at least one operation (+ or -)."); return; }
+
+            const startTestNoInput = document.getElementById('start-test-no');
+            const numTestsInput = document.getElementById('num-tests');
+            const startTestNo = parseInt(startTestNoInput.value) || 1;
+            let numTests = parseInt(numTestsInput.value) || 1;
+            if (numTests > 10) numTests = 10;
+            if (numTests < 1) numTests = 1;
+
+            const originalText = btnText.innerText;
+            btnText.innerText = "Generating PDF...";
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.disabled = true;
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            try {
+                const workerElement = document.createElement('div');
+                workerElement.className = 'text-black bg-white font-sans';
+                workerElement.style.width = '297mm'; 
+
+                let allHTML = '';
+                for (let i = 0; i < numTests; i++) {
+                    const currentTestNo = startTestNo + i;
+                    const testQuestions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
+                    const isLastPage = (i === numTests - 1);
+                    allHTML += generatePageHTML(currentTestNo, testQuestions, isLastPage);
+                }
+                workerElement.innerHTML = allHTML;
+
+                const opt = {
+                    margin: 0,
+                    filename: `Math_Sprint_Tests_${startTestNo}_to_${startTestNo + numTests - 1}.pdf`,
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                    pagebreak: { mode: 'css', after: '.pdf-page' }
+                };
+
+                await html2pdf().set(opt).from(workerElement).save();
+                startTestNoInput.value = startTestNo + numTests; 
+                
+            } catch (err) {
+                console.error("PDF Generation Error: ", err);
+                alert("There was an error generating the PDF.");
+            } finally {
+                btnText.innerText = originalText;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.disabled = false;
+            }
         }
     </script>
 </body>
