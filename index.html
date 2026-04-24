@@ -103,7 +103,7 @@
                 </button>
             </div>
 
-            <div class="relative bg-white px-8 pb-8 pt-14 md:px-10 md:pb-10 md:pt-16 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2">
+            <div class="relative bg-white px-6 pb-8 pt-12 md:px-10 md:pb-10 md:pt-16 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2">
                 
                 <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
                     <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="w-24 h-24 rounded-full border-4 border-yellow-300 shadow-md object-cover hover:scale-110 transition-transform">
@@ -116,7 +116,7 @@
                 <div class="absolute top-1/3 -right-4 text-4xl text-indigo-400 font-black animate-float select-none">⚖️</div>
 
                 <div class="prose prose-indigo prose-p:leading-relaxed text-gray-700 relative z-10">
-                    <h2 class="text-2xl font-black text-indigo-700 mb-4 tracking-tight border-b-2 border-indigo-100 pb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-indigo-700 mb-4 tracking-tight border-b-2 border-indigo-100 pb-2 text-center">A Daily Workout for Growing Minds 🧠</h2>
                     <p class="font-bold text-gray-800">Dear Parents,</p>
                     <p class="text-sm">In an era where smart devices are all too eager to do the thinking for us, it is no secret that our children rarely get enough raw practice with fundamental mathematical calculations. Math Sprint was meticulously designed to bridge this gap.</p>
                     <p class="text-sm">Think of it as a daily mental gymnasium—just without the lost water bottles and sweaty socks. Our platform is dedicated entirely to honing your child’s foundational calculation skills, training them to become notably speedier and relentlessly accurate over time.</p>
@@ -126,54 +126,56 @@
             </div>
         </div>
 
-        <div id="game-screen" class="hidden flex-row h-full w-full gap-4 md:gap-6 z-10 relative">
+        <div id="game-screen" class="hidden flex-row h-full w-full gap-3 md:gap-6 z-10 relative">
             
-            <div class="w-16 md:w-20 flex-shrink-0 flex flex-col items-center justify-end bg-white pb-4 pt-4 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
-                <div class="flex-grow w-4 md:w-6 bg-gray-100 rounded-full overflow-hidden relative mb-4 shadow-inner">
+            <div class="w-12 md:w-20 flex-shrink-0 flex flex-col items-center justify-end bg-white pb-4 pt-4 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
+                <div class="flex-grow w-3 md:w-6 bg-gray-100 rounded-full overflow-hidden relative mb-4 shadow-inner">
                     <div id="progress-fill" class="absolute bottom-0 left-0 w-full bg-emerald-400 transition-all duration-300" style="height: 0%;"></div>
                 </div>
-                <div id="progress-text" class="text-xs md:text-sm font-black text-gray-500 tracking-tight">0/20</div>
+                <div id="progress-text" class="text-[10px] md:text-sm font-black text-gray-500 tracking-tight">0/20</div>
             </div>
 
             <div class="flex-grow flex flex-col h-full overflow-hidden">
-                <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-2xl shadow-sm border-2 border-gray-200 flex-shrink-0">
-                    <div class="text-3xl font-black font-mono text-indigo-600 tracking-widest bg-indigo-50 px-4 py-1 rounded-xl" id="timer-display">10:00</div>
+                <div class="flex justify-between items-center mb-4 bg-white p-3 md:p-4 rounded-2xl shadow-sm border-2 border-gray-200 flex-shrink-0">
+                    <div class="text-xl md:text-3xl font-black font-mono text-indigo-600 tracking-widest bg-indigo-50 px-3 py-1 rounded-xl" id="timer-display">10:00</div>
                     <div class="flex items-center gap-2 md:gap-4">
-                        <div class="hidden sm:flex bg-gray-100 p-1 rounded-xl">
-                            <button onclick="setColumns(3)" id="btn-col-3" class="px-4 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors">3 Cols</button>
-                            <button onclick="setColumns(4)" id="btn-col-4" class="px-4 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors">4 Cols</button>
+                        
+                        <div class="hidden lg:flex bg-gray-100 p-1 rounded-xl">
+                            <button onclick="setColumns(2)" id="btn-col-2" class="px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors">2 Cols</button>
+                            <button onclick="setColumns(3)" id="btn-col-3" class="px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors">3 Cols</button>
+                            <button onclick="setColumns(4)" id="btn-col-4" class="px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors">4 Cols</button>
                         </div>
                         
                         <button onclick="showCancelModal()" class="bg-red-50 text-red-500 hover:bg-red-100 border-2 border-red-200 w-10 h-10 md:w-11 md:h-11 rounded-xl font-black transition-all flex items-center justify-center text-lg shadow-sm" title="Cancel Test">
                             ✖
                         </button>
 
-                        <button onclick="submitSprint()" id="submit-btn" class="bg-emerald-500 text-white px-6 md:px-8 py-2 md:py-2.5 rounded-xl font-black hover:bg-emerald-600 transition shadow-md border-b-4 border-emerald-700">
+                        <button onclick="submitSprint()" id="submit-btn" class="bg-emerald-500 text-white px-4 md:px-8 py-2 md:py-2.5 rounded-xl font-black hover:bg-emerald-600 transition shadow-md border-b-4 border-emerald-700 text-sm md:text-base">
                             Submit
                         </button>
                     </div>
                 </div>
 
-                <div id="warning-msg" class="hidden bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-xl p-2 text-center font-bold mb-3 flex-shrink-0 shadow-sm transition-all duration-300">⚠️ Please type numbers only!</div>
-                <div id="error-msg" class="hidden bg-red-100 text-red-600 border border-red-200 rounded-xl p-2 text-center font-bold mb-3 flex-shrink-0 shadow-sm">Oops! Please answer all questions before submitting.</div>
+                <div id="warning-msg" class="hidden bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm transition-all duration-300">⚠️ Please type numbers only!</div>
+                <div id="error-msg" class="hidden bg-red-100 text-red-600 border border-red-200 rounded-xl p-2 text-center text-sm md:text-base font-bold mb-3 flex-shrink-0 shadow-sm">Oops! Please answer all questions before submitting.</div>
 
-                <div class="flex-grow overflow-y-auto pb-6 pr-2">
-                    <div id="questions-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                <div class="flex-grow overflow-y-auto pb-6 pr-1 md:pr-2">
+                    <div id="questions-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         </div>
                 </div>
             </div>
         </div>
 
         <div id="result-screen" class="hidden flex-grow flex flex-col items-center justify-center z-10 relative">
-            <div class="bg-white p-12 rounded-[3rem] shadow-2xl border-4 border-indigo-100 w-full max-w-lg text-center relative overflow-hidden">
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border-4 border-indigo-100 w-full max-w-lg text-center relative overflow-hidden">
                 <div class="absolute -top-10 -left-10 text-6xl opacity-20">🎉</div>
                 <div class="absolute -bottom-10 -right-10 text-6xl opacity-20">🌟</div>
                 
-                <h2 id="result-title" class="text-4xl font-black mb-2 text-indigo-800">Sprint Complete!</h2>
-                <p class="text-gray-500 mb-8 font-bold" id="time-taken-display"></p>
+                <h2 id="result-title" class="text-3xl md:text-4xl font-black mb-2 text-indigo-800">Sprint Complete!</h2>
+                <p class="text-gray-500 mb-8 font-bold text-sm md:text-base" id="time-taken-display"></p>
                 
-                <div class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-indigo-600 mb-2 drop-shadow-sm" id="score-display"></div>
-                <p class="text-2xl font-bold text-emerald-500 mb-8 bg-emerald-50 inline-block px-4 py-1 rounded-full" id="percentage-display"></p>
+                <div class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-indigo-600 mb-2 drop-shadow-sm" id="score-display"></div>
+                <p class="text-xl md:text-2xl font-bold text-emerald-500 mb-8 bg-emerald-50 inline-block px-4 py-1 rounded-full" id="percentage-display"></p>
 
                 <div class="flex flex-col gap-4">
                     <button onclick="showReview()" id="review-btn" class="w-full bg-yellow-100 text-yellow-800 font-black py-4 rounded-2xl hover:bg-yellow-200 transition border-2 border-yellow-300">
@@ -187,13 +189,13 @@
         </div>
 
         <div id="cancel-modal" class="hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center">
-            <div class="bg-white p-8 rounded-[2rem] shadow-2xl border-4 border-red-300 max-w-sm w-full text-center mx-4 transform transition-all">
+            <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-2xl border-4 border-red-300 max-w-sm w-full text-center mx-4 transform transition-all">
                 <div class="text-6xl mb-4 animate-bounce">🚨</div>
                 <h3 class="text-2xl font-black text-gray-800 mb-2">Cancel Test?</h3>
                 <p class="text-gray-500 font-bold mb-6 text-sm">Are you sure you want to cancel the test? All your current progress will be lost!</p>
                 <div class="flex gap-3">
-                    <button onclick="hideCancelModal()" class="flex-1 bg-gray-100 text-gray-700 font-black py-3 rounded-xl hover:bg-gray-200 transition border-b-4 border-gray-300">Resume</button>
-                    <button onclick="confirmCancel()" class="flex-1 bg-red-500 text-white font-black py-3 rounded-xl hover:bg-red-600 transition shadow-md border-b-4 border-red-700">Yes, Cancel</button>
+                    <button onclick="hideCancelModal()" class="flex-1 bg-gray-100 text-gray-700 font-black py-3 rounded-xl hover:bg-gray-200 transition border-b-4 border-gray-300 text-sm md:text-base">Resume</button>
+                    <button onclick="confirmCancel()" class="flex-1 bg-red-500 text-white font-black py-3 rounded-xl hover:bg-red-600 transition shadow-md border-b-4 border-red-700 text-sm md:text-base">Yes, Cancel</button>
                 </div>
             </div>
         </div>
@@ -205,7 +207,7 @@
         let questions = [];
         let timerInterval;
         let timeLeft = 600; 
-        let currentColumns = 3;
+        let currentColumns = 2; // Default to 2 for wider screens initially
         let isReviewMode = false;
         let warningTimeout = null;
 
@@ -266,7 +268,7 @@
             const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
             
             generateQuestions(problemCount, termCount, ops, maxLimit, allowNegative);
-            renderQuestions();
+            setColumns(2); // Initialize grid to default 2 columns for wider screens
             updateProgress();
             
             // Switch themes & screens
@@ -337,15 +339,19 @@
         function renderQuestions() {
             grid.innerHTML = '';
             
-            const sharedFontClass = currentColumns === 4 
-                ? 'text-xl md:text-2xl' 
-                : 'text-2xl md:text-3xl';
+            // Shared responsive font size based on column count
+            let sharedFontClass = 'text-xl md:text-2xl lg:text-3xl';
+            if (currentColumns === 4) {
+                sharedFontClass = 'text-lg md:text-xl lg:text-2xl';
+            } else if (currentColumns === 3) {
+                sharedFontClass = 'text-xl md:text-2xl lg:text-2xl';
+            }
                 
-            const inputWidth = currentColumns === 4 ? 'w-16 md:w-20' : 'w-20 md:w-24';
+            const inputWidth = currentColumns >= 3 ? 'w-14 md:w-20' : 'w-16 md:w-24';
 
             questions.forEach((q, index) => {
                 const item = document.createElement('div');
-                item.className = 'bg-white p-3 md:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors overflow-hidden gap-3 min-w-0';
+                item.className = 'bg-white p-3 md:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors overflow-hidden gap-2 md:gap-3 min-w-0';
 
                 let inputHTML = '';
                 if (isReviewMode) {
@@ -354,10 +360,9 @@
                         <div class="flex flex-col items-end flex-shrink-0">
                             <input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" 
                                 class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">
-                            ${!isCorrect ? `<span class="text-xs md:text-sm text-emerald-600 mt-1 font-black bg-emerald-50 px-2 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}
+                            ${!isCorrect ? `<span class="text-[10px] md:text-sm text-emerald-600 mt-1 font-black bg-emerald-50 px-2 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}
                         </div>`;
                 } else {
-                    // Changed to type="text" with inputmode="numeric" for exact control over typing
                     inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" oninput="saveAnswer(${index}, this)" 
                                 class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
                 }
@@ -380,10 +385,8 @@
             let sanitized = rawValue.replace(/[^0-9-]/g, '');
             
             if (!allowNegative) {
-                // If negatives aren't allowed, strip all minus signs too
                 sanitized = sanitized.replace(/-/g, '');
             } else {
-                // If negatives are allowed, make sure the minus sign is ONLY at the beginning
                 const hasMinus = sanitized.startsWith('-');
                 sanitized = sanitized.replace(/-/g, '');
                 if (hasMinus) {
@@ -391,13 +394,11 @@
                 }
             }
 
-            // If the raw input doesn't match the sanitized version, they typed something invalid
             if (rawValue !== sanitized) {
                 inputElement.value = sanitized;
                 triggerNumberWarning();
             }
 
-            // Save the value to state
             questions[index].userAnswer = (sanitized === "" || sanitized === "-") ? null : parseInt(sanitized);
             
             errorMsg.classList.add('hidden');
@@ -415,21 +416,29 @@
 
         function setColumns(cols) {
             currentColumns = cols;
-            grid.className = `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${cols} gap-3 md:gap-4`;
             
-            const btn3 = document.getElementById('btn-col-3');
-            const btn4 = document.getElementById('btn-col-4');
-            
-            const activeClass = 'px-4 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors';
-            const inactiveClass = 'px-4 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors';
+            // Hardcoded Tailwind mappings to ensure the browser processes them correctly
+            let colClass = '';
+            if (cols === 2) colClass = 'lg:grid-cols-2';
+            else if (cols === 3) colClass = 'lg:grid-cols-3';
+            else if (cols === 4) colClass = 'lg:grid-cols-4';
 
-            if (cols === 3) {
-                btn3.className = activeClass;
-                btn4.className = inactiveClass;
-            } else {
-                btn4.className = activeClass;
-                btn3.className = inactiveClass;
-            }
+            // grid-cols-1 forces Mobile into 1 column. 
+            // sm:grid-cols-2 forces tablets into 2 columns.
+            // lg:grid-cols-X dictates the desktop/laptop layout based on user selection.
+            grid.className = `grid grid-cols-1 sm:grid-cols-2 ${colClass} gap-3 md:gap-4`;
+            
+            // Update button styles safely
+            [2, 3, 4].forEach(c => {
+                const btn = document.getElementById(`btn-col-${c}`);
+                if (btn) {
+                    if (c === cols) {
+                        btn.className = 'px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors';
+                    } else {
+                        btn.className = 'px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors';
+                    }
+                }
+            });
             
             if (questions.length > 0) {
                 renderQuestions();
