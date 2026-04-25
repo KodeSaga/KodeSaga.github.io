@@ -11,80 +11,35 @@
     
     <style>
         body { font-family: 'Nunito', sans-serif; }
-        
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-
-        /* Floating Animations for Homepage Symbols */
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(10deg); }
-        }
-        @keyframes float-reverse {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(-10deg); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(10deg); } }
+        @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(-10deg); } }
         .animate-float { animation: float 4s ease-in-out infinite; }
         .animate-float-delayed { animation: float-reverse 5s ease-in-out 2s infinite; }
-
-        /* Backgrounds */
-        .bg-math-pattern {
-            background-color: #f8fafc;
-            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
-            background-size: 30px 30px;
-        }
+        .bg-math-pattern { background-color: #f8fafc; background-image: radial-gradient(#cbd5e1 2px, transparent 2px); background-size: 30px 30px; }
         .bg-home-gradient { background: linear-gradient(135deg, #cffafe 0%, #fae8ff 50%, #fef08a 100%); }
         .animate-fade-in { animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* =========================================================================
-           CRITICAL FIX: @page MUST be completely outside of @media print.
-           ========================================================================= */
-        @page { 
-            size: landscape; 
-            margin: 10mm; 
-        }
-
-        /* PRINT SPECIFIC STYLES */
+        @page { size: landscape; margin: 10mm; }
         @media print {
-            body { 
-                background: white !important; 
-                color: black !important;
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
-                height: auto !important; 
-                overflow: visible !important;
-            }
+            body { background: white !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; height: auto !important; overflow: visible !important; }
             #app-container { display: none !important; }
             #print-area { display: block !important; }
-            
-            .print-page { 
-                page-break-after: always;
-                width: 100%; 
-                height: 190mm;
-                overflow: hidden;
-            }
+            .print-page { page-break-after: always; width: 100%; height: 190mm; overflow: hidden; }
         }
     </style>
 </head>
 <body id="main-body" class="bg-home-gradient text-gray-800 h-[100dvh] flex flex-col overflow-hidden transition-colors duration-500">
 
     <div id="app-container" class="max-w-7xl mx-auto w-full p-2 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
-        
         <div id="setup-screen" class="flex-grow overflow-y-auto overflow-x-hidden w-full h-full flex flex-col">
-            
             <div class="m-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-4 pb-8 lg:py-6 px-2">
-                
                 <div class="bg-white/90 backdrop-blur-sm p-6 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
-                    
                     <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
                     <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
-
-                    <h1 class="text-3xl lg:text-3xl font-black text-center mb-5 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
-                        Math Sprint! 🚀
-                    </h1>
+                    <h1 class="text-3xl lg:text-3xl font-black text-center mb-5 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">Math Sprint! 🚀</h1>
                     
                     <div id="core-settings">
                         <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
@@ -119,19 +74,12 @@
                         <div id="limits-row" class="grid grid-cols-1 gap-4 lg:gap-3 mb-6 transition-all duration-300">
                             <div id="number-limit-container" class="relative">
                                 <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Use numbers up to (+, -)</label>
-                                <input type="number" id="number-limit" value="10" min="10" max="100" 
-                                    oninput="checkNumLimit(this, 100, 'num-hint')" 
-                                    onblur="checkMin(this, 10)"
-                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <input type="number" id="number-limit" value="10" min="10" max="100" oninput="checkNumLimit(this, 100, 'num-hint')" onblur="checkMin(this, 10)" class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
                                 <div id="num-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 100</div>
                             </div>
-                            
                             <div id="table-limit-container" class="relative" style="display: none;">
                                 <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Tables till (×, ÷)</label>
-                                <input type="number" id="table-limit" value="10" min="5" max="20" 
-                                    oninput="checkNumLimit(this, 20, 'table-hint')" 
-                                    onblur="checkMin(this, 5)"
-                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <input type="number" id="table-limit" value="10" min="5" max="20" oninput="checkNumLimit(this, 20, 'table-hint')" onblur="checkMin(this, 5)" class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
                                 <div id="table-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 20</div>
                             </div>
                         </div>
@@ -146,19 +94,15 @@
 
                     <div id="action-buttons" class="grid grid-cols-2 gap-3 mt-2">
                         <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-lg py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700 shadow-sm flex flex-col items-center justify-center leading-tight">
-                            <span>Play Online</span>
-                            <span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
+                            <span>Play Online</span><span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
                         </button>
                         <button onclick="showPrintOptions()" class="w-full bg-white text-indigo-600 font-black text-lg py-3 rounded-xl hover:bg-indigo-50 transition-all duration-200 border-2 border-indigo-200 border-b-4 shadow-sm flex flex-col items-center justify-center leading-tight">
-                            <span>Print PDFs</span>
-                            <span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
+                            <span>Print PDFs</span><span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
                         </button>
                     </div>
 
                     <div id="print-options" class="hidden flex-col mt-2 pt-4 border-t-2 border-indigo-50 animate-fade-in">
-                        <h3 class="font-black text-indigo-800 mb-3 flex items-center gap-2 text-sm">
-                            <span>🖨️ PDF Settings</span>
-                        </h3>
+                        <h3 class="font-black text-indigo-800 mb-3 flex items-center gap-2 text-sm"><span>🖨️ PDF Settings</span></h3>
                         <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
                             <div>
                                 <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Start Test No.</label>
@@ -170,15 +114,12 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="hidePrintOptions()" class="w-full bg-gray-100 text-gray-600 font-black text-lg py-3 rounded-xl hover:bg-gray-200 transition-all border-b-4 border-gray-300 shadow-sm">
-                                Cancel
-                            </button>
+                            <button onclick="hidePrintOptions()" class="w-full bg-gray-100 text-gray-600 font-black text-lg py-3 rounded-xl hover:bg-gray-200 transition-all border-b-4 border-gray-300 shadow-sm">Cancel</button>
                             <button id="generate-pdf-btn" onclick="executePrint()" class="w-full bg-indigo-600 text-white font-black text-lg py-3 rounded-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 shadow-sm flex items-center justify-center">
                                 <span id="generate-btn-text">Generate</span>
                             </button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="relative bg-white px-6 pb-6 pt-10 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
@@ -203,7 +144,6 @@
                     This is Demo of Math Sprint App with minimal features, send feedback to the app creator directly or email kode.drama@gmail.com . You can change parameters before playing or printing. As this is just for demo preferably use on a laptop or desktop in Chrome or Firefox browser to have best experience.
                 </p>
             </div>
-
         </div>
 
         <div id="game-screen" class="hidden flex-row h-full w-full gap-3 md:gap-6 z-10 relative">
@@ -264,556 +204,6 @@
 
     <div id="pdf-export-container" class="fixed top-0 left-[-9999px] bg-white text-black z-[-1]" style="width: 297mm;"></div>
 
-    <script>
-        // Core Game Variables
-        let questions = [];
-        let timerInterval;
-        let timeLeft = 600; 
-        let currentColumns = 2; 
-        let isReviewMode = false;
-        let warningTimeout = null;
-
-        // DOM
-        const mainBody = document.getElementById('main-body');
-        const screens = {
-            setup: document.getElementById('setup-screen'),
-            game: document.getElementById('game-screen'),
-            result: document.getElementById('result-screen')
-        };
-        const timerDisplay = document.getElementById('timer-display');
-        const grid = document.getElementById('questions-grid');
-        const errorMsg = document.getElementById('error-msg');
-        const warningMsg = document.getElementById('warning-msg');
-        const submitBtn = document.getElementById('submit-btn');
-        const cancelModal = document.getElementById('cancel-modal');
-
-        // ================= INPUT VALIDATION LOGIC =================
-        function checkNumLimit(inputElem, maxVal, hintId) {
-            const hint = document.getElementById(hintId);
-            if (inputElem.value !== "" && parseInt(inputElem.value) > maxVal) {
-                inputElem.value = maxVal;
-                hint.classList.remove('opacity-0');
-                setTimeout(() => { hint.classList.add('opacity-0'); }, 2000);
-            }
-        }
-
-        function checkMin(inputElem, minVal) {
-            if (inputElem.value === "" || parseInt(inputElem.value) < minVal) {
-                inputElem.value = minVal;
-            }
-        }
-
-        // Dynamic Settings UI Toggle
-        function toggleTableLimitVisibility() {
-            const hasMul = document.getElementById('op-mul').checked;
-            const hasDiv = document.getElementById('op-div').checked;
-            const tableContainer = document.getElementById('table-limit-container');
-            const limitsRow = document.getElementById('limits-row');
-            
-            if (hasMul || hasDiv) {
-                tableContainer.style.display = 'block';
-                limitsRow.classList.add('grid-cols-2');
-                limitsRow.classList.remove('grid-cols-1');
-            } else {
-                tableContainer.style.display = 'none';
-                limitsRow.classList.remove('grid-cols-2');
-                limitsRow.classList.add('grid-cols-1');
-            }
-        }
-        window.addEventListener('DOMContentLoaded', toggleTableLimitVisibility);
-
-        // Print Menu Toggle logic
-        function showPrintOptions() {
-            document.getElementById('action-buttons').classList.add('hidden');
-            document.getElementById('print-options').classList.remove('hidden');
-            document.getElementById('print-options').classList.add('flex');
-        }
-
-        function hidePrintOptions() {
-            document.getElementById('print-options').classList.add('hidden');
-            document.getElementById('print-options').classList.remove('flex');
-            document.getElementById('action-buttons').classList.remove('hidden');
-        }
-
-        function showCancelModal() { cancelModal.classList.remove('hidden'); }
-        function hideCancelModal() { cancelModal.classList.add('hidden'); }
-        function confirmCancel() { hideCancelModal(); resetGame(); }
-
-        function triggerNumberWarning() {
-            warningMsg.classList.remove('hidden');
-            clearTimeout(warningTimeout);
-            warningTimeout = setTimeout(() => { warningMsg.classList.add('hidden'); }, 2500);
-        }
-
-        // ================= MATH ENGINE (Multi/Div Rules & Zero Protection) =================
-        function getGeneratedQuestions(count, terms, ops, maxLimit, allowNegative, tableLimit) {
-            let tempQ = [];
-            for (let i = 0; i < count; i++) {
-                let attempts = 0;
-                let qAdded = false;
-
-                while (attempts < 5000 && !qAdded) {
-                    attempts++;
-                    let selectedOps = [];
-                    for (let j = 1; j < terms; j++) {
-                        selectedOps.push(ops[Math.floor(Math.random() * ops.length)]);
-                    }
-
-                    let nums = [];
-                    for (let j = 0; j < terms; j++) {
-                        let isMulDiv = false;
-                        if (j > 0 && (selectedOps[j-1] === '*' || selectedOps[j-1] === '/')) isMulDiv = true;
-                        if (j < terms - 1 && (selectedOps[j] === '*' || selectedOps[j] === '/')) isMulDiv = true;
-
-                        if (isMulDiv) {
-                            if (j === 0 && selectedOps[0] === '/') {
-                                nums.push(Math.floor(Math.random() * (tableLimit * 10)) + 1);
-                            } else if (j > 0 && selectedOps[j-1] === '/') {
-                                nums.push(Math.floor(Math.random() * tableLimit) + 1);
-                            } else {
-                                nums.push(Math.floor(Math.random() * tableLimit) + 1); 
-                            }
-                        } else {
-                            nums.push(Math.floor(Math.random() * (maxLimit + 1))); 
-                        }
-                    }
-
-                    let hasDivZero = false;
-                    for (let k = 0; k < selectedOps.length; k++) {
-                        if (selectedOps[k] === '/' && nums[k+1] === 0) hasDivZero = true;
-                    }
-                    if (hasDivZero) continue;
-
-                    let expr = nums[0].toString();
-                    let evalExpr = nums[0].toString();
-                    for (let j = 0; j < selectedOps.length; j++) {
-                        let visualOp = selectedOps[j] === '*' ? '×' : (selectedOps[j] === '/' ? '÷' : selectedOps[j]);
-                        expr += ` ${visualOp} ${nums[j+1]}`;
-                        evalExpr += ` ${selectedOps[j]} ${nums[j+1]}`;
-                    }
-
-                    let ans;
-                    try { ans = eval(evalExpr); } catch(e) { continue; }
-
-                    if (!isFinite(ans)) continue; 
-                    if (ans % 1 !== 0) continue; 
-                    if (!allowNegative && ans < 0) continue; 
-
-                    let hasMulDiv = selectedOps.includes('*') || selectedOps.includes('/');
-                    if (hasMulDiv && ans > tableLimit * 10) continue;
-
-                    tempQ.push({ id: i, text: expr, correctAnswer: ans, userAnswer: null });
-                    qAdded = true;
-                }
-                
-                if(!qAdded) tempQ.push({ id: i, text: "0 + 0", correctAnswer: 0, userAnswer: null });
-            }
-            return tempQ;
-        }
-
-        // Online Interactive Game Logic
-        function startSprint() {
-            isReviewMode = false; 
-            const problemCount = parseInt(document.getElementById('problem-count').value);
-            const termCount = parseInt(document.getElementById('term-count').value);
-            const allowNegative = document.getElementById('allow-negative').checked;
-            let ops = [];
-            if(document.getElementById('op-add').checked) ops.push('+');
-            if(document.getElementById('op-sub').checked) ops.push('-');
-            if(document.getElementById('op-mul').checked) ops.push('*');
-            if(document.getElementById('op-div').checked) ops.push('/');
-            if (ops.length === 0) { alert("Please select at least one operation."); return; }
-
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
-            const tableLimit = parseInt(document.getElementById('table-limit').value) || 10;
-            
-            questions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative, tableLimit);
-            setColumns(2); 
-            updateProgress();
-            
-            mainBody.classList.remove('bg-home-gradient');
-            mainBody.classList.add('bg-math-pattern');
-            screens.setup.classList.add('hidden');
-            screens.game.classList.remove('hidden');
-            screens.game.classList.add('flex');
-            
-            timeLeft = 600;
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmitSprint(); }
-            }, 1000);
-        }
-
-        function renderQuestions() {
-            grid.innerHTML = '';
-            const maxLen = Math.max(...questions.map(q => q.text.length));
-            let sharedFontClass = '';
-            let inputWidth = '';
-
-            if (currentColumns === 4) {
-                inputWidth = 'w-14 lg:w-16'; 
-                if (maxLen >= 20) sharedFontClass = 'text-[9px] sm:text-[10px] md:text-xs lg:text-sm tracking-tighter';
-                else if (maxLen >= 15) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-base tracking-tight';
-                else sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-xl';
-            } else if (currentColumns === 3) {
-                inputWidth = 'w-16 lg:w-20';
-                if (maxLen >= 20) sharedFontClass = 'text-[10px] sm:text-xs md:text-sm lg:text-lg tracking-tighter';
-                else if (maxLen >= 15) sharedFontClass = 'text-xs sm:text-sm md:text-base lg:text-xl tracking-tight';
-                else sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-2xl';
-            } else { 
-                inputWidth = 'w-20 lg:w-24';
-                if (maxLen >= 20) sharedFontClass = 'text-sm sm:text-base md:text-lg lg:text-2xl tracking-tight';
-                else if (maxLen >= 15) sharedFontClass = 'text-base sm:text-lg md:text-xl lg:text-3xl tracking-tight';
-                else sharedFontClass = 'text-lg sm:text-xl md:text-2xl lg:text-4xl';
-            }
-
-            questions.forEach((q, index) => {
-                const item = document.createElement('div');
-                item.className = 'bg-white p-2 md:p-3 lg:p-4 rounded-2xl shadow-sm border-2 border-gray-100 flex items-center justify-between font-black text-gray-700 hover:border-indigo-200 transition-colors w-full gap-2';
-
-                let inputHTML = '';
-                if (isReviewMode) {
-                    const isCorrect = q.userAnswer === q.correctAnswer;
-                    inputHTML = `<div class="flex flex-col items-end flex-shrink-0"><input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">${!isCorrect ? `<span class="text-[9px] md:text-xs text-emerald-600 mt-1 font-black bg-emerald-50 px-1.5 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}</div>`;
-                } else {
-                    let currentVal = q.userAnswer !== null ? q.userAnswer : '';
-                    inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" value="${currentVal}" oninput="saveAnswer(${index}, this)" class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
-                }
-
-                item.innerHTML = `<span class="whitespace-nowrap flex-grow text-right ${sharedFontClass} mr-1">${q.text} = </span>${inputHTML}`;
-                grid.appendChild(item);
-            });
-        }
-
-        function saveAnswer(index, inputElement) {
-            const rawValue = inputElement.value;
-            const allowNegative = document.getElementById('allow-negative').checked;
-            let sanitized = rawValue.replace(/[^0-9-]/g, '');
-            if (!allowNegative) { sanitized = sanitized.replace(/-/g, ''); } 
-            else {
-                const hasMinus = sanitized.startsWith('-');
-                sanitized = sanitized.replace(/-/g, '');
-                if (hasMinus) sanitized = '-' + sanitized;
-            }
-
-            if (rawValue !== sanitized) { inputElement.value = sanitized; triggerNumberWarning(); }
-            questions[index].userAnswer = (sanitized === "" || sanitized === "-") ? null : parseInt(sanitized);
-            errorMsg.classList.add('hidden');
-            updateProgress();
-        }
-
-        function updateProgress() {
-            const answeredCount = questions.filter(q => q.userAnswer !== null).length;
-            document.getElementById('progress-fill').style.height = `${(answeredCount / questions.length) * 100}%`;
-            document.getElementById('progress-text').textContent = `${answeredCount}/${questions.length}`;
-        }
-
-        function setColumns(cols) {
-            currentColumns = cols;
-            let colClass = cols === 2 ? 'lg:grid-cols-2' : (cols === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4');
-            grid.className = `grid grid-cols-1 sm:grid-cols-2 ${colClass} gap-3 md:gap-4`;
-            
-            [2, 3, 4].forEach(c => {
-                const btn = document.getElementById(`btn-col-${c}`);
-                if (btn) btn.className = (c === cols) ? 'px-3 py-1.5 text-sm font-bold rounded-lg bg-white shadow-sm text-indigo-600 transition-colors' : 'px-3 py-1.5 text-sm font-bold rounded-lg text-gray-400 hover:text-gray-700 transition-colors';
-            });
-            if (questions.length > 0) renderQuestions(); 
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            if (timeLeft <= 60 && !isReviewMode) {
-                timerDisplay.classList.add('text-red-500', 'bg-red-50');
-                timerDisplay.classList.remove('text-indigo-600', 'bg-indigo-50');
-            } else {
-                timerDisplay.classList.remove('text-red-500', 'bg-red-50');
-                timerDisplay.classList.add('text-indigo-600', 'bg-indigo-50');
-            }
-        }
-
-        function submitSprint() {
-            const allAnswered = questions.every(q => q.userAnswer !== null);
-            if (!allAnswered) { errorMsg.classList.remove('hidden'); return; }
-            processResults();
-        }
-        function autoSubmitSprint() { processResults(); }
-
-        function processResults() {
-            clearInterval(timerInterval);
-            let correctCount = 0;
-            questions.forEach(q => { if (q.userAnswer === q.correctAnswer) correctCount++; });
-
-            const percentage = (correctCount / questions.length) * 100;
-            const timeTaken = 600 - timeLeft;
-            
-            document.getElementById('score-display').textContent = `${correctCount} / ${questions.length}`;
-            document.getElementById('percentage-display').textContent = `${percentage.toFixed(0)}% Accuracy`;
-            document.getElementById('time-taken-display').textContent = `Time taken: ${Math.floor(timeTaken / 60)}m ${timeTaken % 60}s`;
-
-            screens.game.classList.remove('flex');
-            screens.game.classList.add('hidden');
-            screens.result.classList.remove('hidden');
-            screens.result.classList.add('flex');
-
-            if (percentage >= 90) { document.getElementById('result-title').textContent = "Incredible Job! 🏆"; triggerConfetti(); } 
-            else if (percentage >= 70) document.getElementById('result-title').textContent = "Great Effort! 👍";
-            else document.getElementById('result-title').textContent = "Good Practice! 💪";
-            document.getElementById('review-btn').style.display = percentage === 100 ? 'none' : 'block';
-        }
-
-        function showReview() {
-            isReviewMode = true;
-            screens.result.classList.remove('flex');
-            screens.result.classList.add('hidden');
-            screens.game.classList.remove('hidden');
-            screens.game.classList.add('flex');
-            submitBtn.style.display = 'none';
-            timerDisplay.textContent = "REVIEW MODE";
-            timerDisplay.classList.remove('text-red-500', 'bg-red-50', 'text-indigo-600');
-            timerDisplay.classList.add('text-gray-500', 'bg-gray-100');
-            renderQuestions();
-            
-            const backBtn = document.createElement('button');
-            backBtn.textContent = "⬅ Back to Results";
-            backBtn.className = "col-span-full w-full bg-gray-200 text-gray-700 font-black text-lg py-4 rounded-xl hover:bg-gray-300 transition mt-4 mb-10 shadow-sm border-b-4 border-gray-400";
-            backBtn.onclick = () => {
-                screens.game.classList.remove('flex');
-                screens.game.classList.add('hidden');
-                screens.result.classList.remove('hidden');
-                screens.result.classList.add('flex');
-            };
-            grid.appendChild(backBtn);
-        }
-
-        function resetGame() {
-            clearInterval(timerInterval);
-            isReviewMode = false; 
-            mainBody.classList.remove('bg-math-pattern');
-            mainBody.classList.add('bg-home-gradient');
-            screens.result.classList.remove('flex');
-            screens.result.classList.add('hidden');
-            screens.game.classList.remove('flex');
-            screens.game.classList.add('hidden');
-            screens.setup.classList.remove('hidden');
-            submitBtn.style.display = 'block';
-            errorMsg.classList.add('hidden');
-            warningMsg.classList.add('hidden');
-            hidePrintOptions(); 
-        }
-
-        function triggerConfetti() {
-            var duration = 4 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 60 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors: ['#fce7f3', '#fbcfe8', '#f9a8d4', '#818cf8', '#c084fc'] }));
-            }, 250);
-        }
-
-        // ================= DIRECT PDF DOWNLOAD ENGINE =================
-        
-        function getQuestionColumns(qList) {
-            let total = qList.length;
-            if (total === 20) {
-                return [qList.slice(0, 7), qList.slice(7, 14), qList.slice(14, 20)];
-            } else if (total === 40) {
-                return [qList.slice(0, 14), qList.slice(14, 27), qList.slice(27, 40)];
-            } else {
-                let res = [];
-                let size = Math.ceil(total / 4);
-                for(let i=0; i<4; i++) res.push(qList.slice(i*size, (i+1)*size));
-                return res;
-            }
-        }
-
-        function splitArray(arr, cols) {
-            let res = [];
-            let size = Math.ceil(arr.length / cols);
-            for(let i=0; i<cols; i++) res.push(arr.slice(i*size, (i+1)*size));
-            return res;
-        }
-
-        function generatePageHTML(testNum, qList, isLastPage) {
-            let colsArray = getQuestionColumns(qList);
-            let numCols = colsArray.length;
-            let colLetters = ['A', 'B', 'C', 'D'];
-            
-            let colorSky = '#0284c7'; 
-            
-            let maxLen = Math.max(...qList.map(q => q.text.length));
-            
-            // =================================================================
-            // DYNAMIC FONT SCALING ENGINE
-            // Calculates exact pixel size to completely fit the longest numeral
-            // =================================================================
-            let effectiveMaxLen = maxLen + 3; // Account for the " = " string
-            let fontSizePx, boxWidthPx;
-            
-            if (numCols === 4) { 
-                fontSizePx = Math.min(15, 280 / effectiveMaxLen);
-                boxWidthPx = Math.max(18, fontSizePx * 2.2);
-            } else { 
-                fontSizePx = Math.min(18, 400 / effectiveMaxLen);
-                boxWidthPx = Math.max(30, fontSizePx * 2.5);
-            }
-            
-            let printStyle = `font-size: ${fontSizePx.toFixed(1)}px; line-height: 1.1;`;
-            let minIndexWidth = Math.max(20, fontSizePx * 1.5).toFixed(1);
-
-            // DYNAMIC VERTICAL SPACING based on count
-            let maxRows = Math.ceil(qList.length / numCols);
-            let rowHeight = `${100 / maxRows}%`;
-
-            let gridHTML = '<div class="flex w-full h-full gap-[8mm] justify-between mt-2 pb-2">';
-            
-            colsArray.forEach((colGroup, colIndex) => {
-                gridHTML += `<div class="flex-1 flex flex-col h-full overflow-hidden px-1">`; 
-                gridHTML += `<div class="text-center font-black tracking-wider text-[14px] flex-shrink-0 mb-2" style="color: ${colorSky} !important;">COLUMN ${colLetters[colIndex]}</div>`;
-                gridHTML += `<div class="flex flex-col flex-grow w-full">`;
-                
-                colGroup.forEach((q) => {
-                    let globalIndex = qList.indexOf(q) + 1;
-                    gridHTML += `
-                        <div class="flex items-center w-full" style="height: ${rowHeight};">
-                            <div class="flex items-baseline font-black font-sans text-gray-800 whitespace-nowrap w-full" style="${printStyle}">
-                                <div style="min-width: ${minIndexWidth}px; color: ${colorSky} !important;" class="text-left flex-shrink-0">${globalIndex})</div>
-                                <div class="text-left flex-shrink-0">${q.text} =</div>
-                                <div style="border-bottom: 2px solid #1f2937; width: ${boxWidthPx.toFixed(1)}px; margin-left: 6px; flex-shrink: 0;"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                gridHTML += `</div></div>`;
-            });
-            gridHTML += '</div>';
-
-            let ansCols = 2; 
-            let ansColsArray = splitArray(qList, ansCols);
-            let maxAnsRows = Math.ceil(qList.length / ansCols);
-            let ansRowHeight = `${100 / maxAnsRows}%`;
-            
-            let ansHTML = `<div class="flex w-full h-full gap-2 text-[10px] font-black text-gray-800 mt-2 pb-2">`;
-            
-            ansColsArray.forEach((colGroup) => {
-                ansHTML += `<div class="flex-1 flex flex-col h-full">`;
-                colGroup.forEach((q) => {
-                    let globalIndex = qList.indexOf(q) + 1;
-                    ansHTML += `<div class="flex items-center" style="height: ${ansRowHeight};">
-                                    <div>${globalIndex}: <span style="color: #4338ca !important;">${q.correctAnswer}</span></div>
-                                </div>`;
-                });
-                ansHTML += `</div>`;
-            });
-            ansHTML += '</div>';
-
-            const pageBreakCSS = isLastPage ? '' : 'page-break-after: always;';
-
-            return `
-            <div class="pdf-page" style="width: 297mm; height: 209mm; padding: 10mm; box-sizing: border-box; display: flex; flex-direction: row; background: white; ${pageBreakCSS}">
-                
-                <div style="width: 86%; padding-right: 10mm; display: flex; flex-direction: column; height: 100%;">
-                    <h1 class="text-2xl font-black text-center text-sky-700 tracking-wide uppercase mb-1 flex-shrink-0">10 MINUTE MATH SPRINT - TEST NO. ${testNum}</h1>
-                    
-                    <div class="flex justify-between font-bold text-gray-700 text-sm border-b-2 border-gray-200 pb-1 mb-2 px-2 flex-shrink-0">
-                        <span>Name: ______________________</span>
-                        <span>Date: _______________</span>
-                        <span>Time Started: ___:___</span>
-                        <span>Time Finished: ___:___</span>
-                    </div>
-
-                    <div class="flex-grow w-full" style="height: calc(100% - 60px);">
-                        ${gridHTML}
-                    </div>
-                </div>
-
-                <div style="width: 14%; padding-left: 5mm; border-left: 2px dashed #d1d5db; display: flex; flex-direction: column; position: relative; height: 100%;">
-                    <div class="text-center font-black text-gray-800 mb-2 mt-2 flex-shrink-0">
-                        <span class="block text-lg mb-0.5 text-gray-400">↹</span>
-                        <span class="block uppercase tracking-widest text-[9px] mb-0.5 text-gray-500">Fold Here</span>
-                        <span class="block uppercase underline text-[11px] tracking-wider mt-1">Answers</span>
-                    </div>
-                    <div class="flex-grow w-full" style="height: calc(100% - 70px);">
-                        ${ansHTML}
-                    </div>
-                </div>
-            </div>
-            `;
-        }
-
-        async function executePrint() {
-            const btnText = document.getElementById('generate-btn-text');
-            const btn = document.getElementById('generate-pdf-btn');
-            
-            const problemCount = parseInt(document.getElementById('problem-count').value);
-            const termCount = parseInt(document.getElementById('term-count').value);
-            const allowNegative = document.getElementById('allow-negative').checked;
-            
-            let ops = [];
-            if(document.getElementById('op-add').checked) ops.push('+');
-            if(document.getElementById('op-sub').checked) ops.push('-');
-            if(document.getElementById('op-mul').checked) ops.push('*');
-            if(document.getElementById('op-div').checked) ops.push('/');
-            if (ops.length === 0) { alert("Please select at least one operation (+ or -)."); return; }
-
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 100;
-            const tableLimit = parseInt(document.getElementById('table-limit').value) || 10;
-
-            const startTestNoInput = document.getElementById('start-test-no');
-            const numTestsInput = document.getElementById('num-tests');
-            const startTestNo = parseInt(startTestNoInput.value) || 1;
-            let numTests = parseInt(numTestsInput.value) || 1;
-            if (numTests > 10) numTests = 10;
-            if (numTests < 1) numTests = 1;
-
-            const originalText = btnText.innerText;
-            btnText.innerText = "Generating PDF...";
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.disabled = true;
-
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            try {
-                const workerElement = document.createElement('div');
-                workerElement.className = 'text-black bg-white font-sans';
-                workerElement.style.width = '297mm'; 
-
-                let allHTML = '';
-                for (let i = 0; i < numTests; i++) {
-                    const currentTestNo = startTestNo + i;
-                    const testQuestions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative, tableLimit);
-                    const isLastPage = (i === numTests - 1);
-                    allHTML += generatePageHTML(currentTestNo, testQuestions, isLastPage);
-                }
-                workerElement.innerHTML = allHTML;
-
-                const opt = {
-                    margin: 0,
-                    filename: `Math_Sprint_Tests_${startTestNo}_to_${startTestNo + numTests - 1}.pdf`,
-                    image: { type: 'jpeg', quality: 1 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-                    pagebreak: { mode: 'css', after: '.pdf-page' }
-                };
-
-                await html2pdf().set(opt).from(workerElement).save();
-                startTestNoInput.value = startTestNo + numTests; 
-                
-            } catch (err) {
-                console.error("PDF Generation Error: ", err);
-                alert("There was an error generating the PDF.");
-            } finally {
-                btnText.innerText = originalText;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.disabled = false;
-            }
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
