@@ -117,10 +117,9 @@
                         </div>
 
                         <div id="limits-row" class="grid grid-cols-1 gap-4 lg:gap-3 mb-6 transition-all duration-300">
-                            
                             <div id="number-limit-container" class="relative">
                                 <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Use numbers up to (+, -)</label>
-                                <input type="number" id="number-limit" value="100" min="10" max="100" 
+                                <input type="number" id="number-limit" value="10" min="10" max="100" 
                                     oninput="checkNumLimit(this, 100, 'num-hint')" 
                                     onblur="checkMin(this, 10)"
                                     class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
@@ -135,7 +134,6 @@
                                     class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
                                 <div id="table-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 20</div>
                             </div>
-                            
                         </div>
 
                         <div class="mb-5 lg:mb-4 bg-yellow-50 p-2 rounded-xl border border-yellow-200">
@@ -347,7 +345,7 @@
             warningTimeout = setTimeout(() => { warningMsg.classList.add('hidden'); }, 2500);
         }
 
-        // ================= MATH ENGINE =================
+        // ================= MATH ENGINE (Multi/Div Rules & Zero Protection) =================
         function getGeneratedQuestions(count, terms, ops, maxLimit, allowNegative, tableLimit) {
             let tempQ = [];
             for (let i = 0; i < count; i++) {
@@ -426,7 +424,7 @@
             if(document.getElementById('op-div').checked) ops.push('/');
             if (ops.length === 0) { alert("Please select at least one operation."); return; }
 
-            const maxLimit = parseInt(document.getElementById('number-limit').value) || 100;
+            const maxLimit = parseInt(document.getElementById('number-limit').value) || 10;
             const tableLimit = parseInt(document.getElementById('table-limit').value) || 10;
             
             questions = getGeneratedQuestions(problemCount, termCount, ops, maxLimit, allowNegative, tableLimit);
@@ -480,7 +478,6 @@
                     const isCorrect = q.userAnswer === q.correctAnswer;
                     inputHTML = `<div class="flex flex-col items-end flex-shrink-0"><input type="text" disabled value="${q.userAnswer !== null ? q.userAnswer : ''}" class="${inputWidth} text-center border-4 rounded-xl py-1 md:py-2 ${sharedFontClass} font-black ${isCorrect ? 'border-green-400 text-green-700 bg-green-50' : 'border-red-400 text-red-700 bg-red-50'} outline-none shadow-inner">${!isCorrect ? `<span class="text-[9px] md:text-xs text-emerald-600 mt-1 font-black bg-emerald-50 px-1.5 rounded border border-emerald-100 whitespace-nowrap">Ans: ${q.correctAnswer}</span>` : ''}</div>`;
                 } else {
-                    // FIX: Restore user's previously typed answer when re-rendering the layout
                     let currentVal = q.userAnswer !== null ? q.userAnswer : '';
                     inputHTML = `<input type="text" inputmode="numeric" id="input-${index}" value="${currentVal}" oninput="saveAnswer(${index}, this)" class="${inputWidth} text-center border-4 border-gray-200 rounded-xl py-1 md:py-2 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all ${sharedFontClass} font-black text-indigo-700 shadow-inner flex-shrink-0" autocomplete="off">`;
                 }
@@ -651,53 +648,66 @@
             let colorSky = '#0284c7'; 
             
             let maxLen = Math.max(...qList.map(q => q.text.length));
-            let printFontClass = 'text-[16px]';
-            let boxWidth = '40px'; 
             
-            if (numCols === 4) { // 60 questions
-                if (maxLen >= 17) { printFontClass = 'text-[12px] tracking-tighter'; boxWidth = '25px'; }
-                else if (maxLen >= 14) { printFontClass = 'text-[13px] tracking-tighter'; boxWidth = '30px'; } 
-                else if (maxLen >= 12) { printFontClass = 'text-[14px] tracking-tight'; boxWidth = '35px'; }
-                else { printFontClass = 'text-[15px]'; boxWidth = '40px'; }
-            } else { // 3 Columns (20 or 40 questions)
-                if (maxLen >= 17) { printFontClass = 'text-[14px] tracking-tighter'; boxWidth = '35px'; }
-                else if (maxLen >= 14) { printFontClass = 'text-[15px] tracking-tighter'; boxWidth = '40px'; } 
-                else if (maxLen >= 12) { printFontClass = 'text-[16px] tracking-tight'; boxWidth = '45px'; }
-                else { printFontClass = 'text-[18px]'; boxWidth = '50px'; }
+            // =================================================================
+            // DYNAMIC FONT SCALING ENGINE
+            // Calculates exact pixel size to completely fit the longest numeral
+            // =================================================================
+            let effectiveMaxLen = maxLen + 3; // Account for the " = " string
+            let fontSizePx, boxWidthPx;
+            
+            if (numCols === 4) { 
+                fontSizePx = Math.min(15, 280 / effectiveMaxLen);
+                boxWidthPx = Math.max(18, fontSizePx * 2.2);
+            } else { 
+                fontSizePx = Math.min(18, 400 / effectiveMaxLen);
+                boxWidthPx = Math.max(30, fontSizePx * 2.5);
             }
+            
+            let printStyle = `font-size: ${fontSizePx.toFixed(1)}px; line-height: 1.1;`;
+            let minIndexWidth = Math.max(20, fontSizePx * 1.5).toFixed(1);
 
-            let gapYClass = qList.length > 40 ? 'gap-y-1.5' : 'gap-y-3';
+            // DYNAMIC VERTICAL SPACING based on count
+            let maxRows = Math.ceil(qList.length / numCols);
+            let rowHeight = `${100 / maxRows}%`;
 
-            let gridHTML = '<div class="flex w-full gap-[8mm] justify-between mt-3">';
+            let gridHTML = '<div class="flex w-full h-full gap-[8mm] justify-between mt-2 pb-2">';
             
             colsArray.forEach((colGroup, colIndex) => {
-                gridHTML += `<div class="flex-1 flex flex-col ${gapYClass} overflow-hidden px-1">`; 
-                gridHTML += `<div class="text-center font-black tracking-wider mb-2 text-[14px]" style="color: ${colorSky} !important;">COLUMN ${colLetters[colIndex]}</div>`;
+                gridHTML += `<div class="flex-1 flex flex-col h-full overflow-hidden px-1">`; 
+                gridHTML += `<div class="text-center font-black tracking-wider text-[14px] flex-shrink-0 mb-2" style="color: ${colorSky} !important;">COLUMN ${colLetters[colIndex]}</div>`;
+                gridHTML += `<div class="flex flex-col flex-grow w-full">`;
                 
                 colGroup.forEach((q) => {
                     let globalIndex = qList.indexOf(q) + 1;
-                    
                     gridHTML += `
-                        <div class="flex items-end ${printFontClass} font-black font-sans text-gray-800 whitespace-nowrap w-full mb-1">
-                            <div style="min-width: 20px; color: ${colorSky} !important;" class="text-left flex-shrink-0">${globalIndex})</div>
-                            <div class="text-left flex-shrink-0">${q.text} =</div>
-                            <div style="border-bottom: 2px solid #1f2937; width: ${boxWidth}; height: 0.9em; margin-left: 6px; margin-bottom: 2px; flex-shrink: 0;"></div>
+                        <div class="flex items-center w-full" style="height: ${rowHeight};">
+                            <div class="flex items-baseline font-black font-sans text-gray-800 whitespace-nowrap w-full" style="${printStyle}">
+                                <div style="min-width: ${minIndexWidth}px; color: ${colorSky} !important;" class="text-left flex-shrink-0">${globalIndex})</div>
+                                <div class="text-left flex-shrink-0">${q.text} =</div>
+                                <div style="border-bottom: 2px solid #1f2937; width: ${boxWidthPx.toFixed(1)}px; margin-left: 6px; flex-shrink: 0;"></div>
+                            </div>
                         </div>
                     `;
                 });
-                gridHTML += `</div>`;
+                gridHTML += `</div></div>`;
             });
             gridHTML += '</div>';
 
-            let ansCols = qList.length > 40 ? 4 : (qList.length > 20 ? 3 : 2);
+            let ansCols = 2; 
             let ansColsArray = splitArray(qList, ansCols);
-            let ansHTML = `<div class="flex w-full gap-2 text-[10px] font-black text-gray-800 mt-2">`;
+            let maxAnsRows = Math.ceil(qList.length / ansCols);
+            let ansRowHeight = `${100 / maxAnsRows}%`;
+            
+            let ansHTML = `<div class="flex w-full h-full gap-2 text-[10px] font-black text-gray-800 mt-2 pb-2">`;
             
             ansColsArray.forEach((colGroup) => {
-                ansHTML += `<div class="flex-1 flex flex-col gap-[2px]">`;
+                ansHTML += `<div class="flex-1 flex flex-col h-full">`;
                 colGroup.forEach((q) => {
                     let globalIndex = qList.indexOf(q) + 1;
-                    ansHTML += `<div>${globalIndex}: <span style="color: #4338ca !important;">${q.correctAnswer}</span></div>`;
+                    ansHTML += `<div class="flex items-center" style="height: ${ansRowHeight};">
+                                    <div>${globalIndex}: <span style="color: #4338ca !important;">${q.correctAnswer}</span></div>
+                                </div>`;
                 });
                 ansHTML += `</div>`;
             });
@@ -708,28 +718,28 @@
             return `
             <div class="pdf-page" style="width: 297mm; height: 209mm; padding: 10mm; box-sizing: border-box; display: flex; flex-direction: row; background: white; ${pageBreakCSS}">
                 
-                <div style="width: 80%; padding-right: 10mm; display: flex; flex-direction: column; height: 100%;">
-                    <h1 class="text-2xl font-black text-center text-sky-700 tracking-wide uppercase mb-1">10 MINUTE MATH SPRINT - TEST NO. ${testNum}</h1>
+                <div style="width: 86%; padding-right: 10mm; display: flex; flex-direction: column; height: 100%;">
+                    <h1 class="text-2xl font-black text-center text-sky-700 tracking-wide uppercase mb-1 flex-shrink-0">10 MINUTE MATH SPRINT - TEST NO. ${testNum}</h1>
                     
-                    <div class="flex justify-between font-bold text-gray-700 text-sm border-b-2 border-gray-200 pb-1 mb-2 px-2">
+                    <div class="flex justify-between font-bold text-gray-700 text-sm border-b-2 border-gray-200 pb-1 mb-2 px-2 flex-shrink-0">
                         <span>Name: ______________________</span>
                         <span>Date: _______________</span>
                         <span>Time Started: ___:___</span>
                         <span>Time Finished: ___:___</span>
                     </div>
 
-                    <div class="flex-grow flex items-start w-full">
+                    <div class="flex-grow w-full" style="height: calc(100% - 60px);">
                         ${gridHTML}
                     </div>
                 </div>
 
-                <div style="width: 20%; padding-left: 1rem; border-left: 2px dashed #d1d5db; display: flex; flex-direction: column; position: relative; height: 100%;">
-                    <div class="text-center font-black text-gray-800 mb-2 mt-4">
-                        <span class="block uppercase tracking-widest text-[9px] mb-0.5 text-gray-500">Fold or Cut</span>
-                        <span class="block text-sm mb-0.5 text-gray-300">👇</span>
-                        <span class="block uppercase underline text-sm tracking-wider">Answers</span>
+                <div style="width: 14%; padding-left: 5mm; border-left: 2px dashed #d1d5db; display: flex; flex-direction: column; position: relative; height: 100%;">
+                    <div class="text-center font-black text-gray-800 mb-2 mt-2 flex-shrink-0">
+                        <span class="block text-lg mb-0.5 text-gray-400">↹</span>
+                        <span class="block uppercase tracking-widest text-[9px] mb-0.5 text-gray-500">Fold Here</span>
+                        <span class="block uppercase underline text-[11px] tracking-wider mt-1">Answers</span>
                     </div>
-                    <div class="flex-grow w-full">
+                    <div class="flex-grow w-full" style="height: calc(100% - 70px);">
                         ${ansHTML}
                     </div>
                 </div>
