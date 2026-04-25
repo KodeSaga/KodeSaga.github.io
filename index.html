@@ -11,35 +11,137 @@
     
     <style>
         body { font-family: 'Nunito', sans-serif; }
+        
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(10deg); } }
-        @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(-10deg); } }
+
+        /* Floating Animations for Homepage Symbols */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-10deg); }
+        }
         .animate-float { animation: float 4s ease-in-out infinite; }
         .animate-float-delayed { animation: float-reverse 5s ease-in-out 2s infinite; }
-        .bg-math-pattern { background-color: #f8fafc; background-image: radial-gradient(#cbd5e1 2px, transparent 2px); background-size: 30px 30px; }
+
+        /* Backgrounds */
+        .bg-math-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
         .bg-home-gradient { background: linear-gradient(135deg, #cffafe 0%, #fae8ff 50%, #fef08a 100%); }
         .animate-fade-in { animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        @page { size: landscape; margin: 10mm; }
+
+        /* =========================================================================
+           CRITICAL FIX: @page MUST be completely outside of @media print.
+           ========================================================================= */
+        @page { 
+            size: landscape; 
+            margin: 10mm; 
+        }
+
+        /* PRINT SPECIFIC STYLES */
         @media print {
-            body { background: white !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; height: auto !important; overflow: visible !important; }
+            body { 
+                background: white !important; 
+                color: black !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+                height: auto !important; 
+                overflow: visible !important;
+            }
             #app-container { display: none !important; }
             #print-area { display: block !important; }
-            .print-page { page-break-after: always; width: 100%; height: 190mm; overflow: hidden; }
+            
+            .print-page { 
+                page-break-after: always;
+                width: 100%; 
+                height: 190mm;
+                overflow: hidden;
+            }
         }
     </style>
 </head>
 <body id="main-body" class="bg-home-gradient text-gray-800 h-[100dvh] flex flex-col overflow-hidden transition-colors duration-500">
 
+    <div id="maintenance-banner-unit" style="position: fixed; inset: 0; pointer-events: none; z-index: 9999; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+        <style>
+            @keyframes police-marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            .police-tape {
+                position: absolute;
+                width: 250vw; /* Extra wide to cover screen corners when rotated */
+                background-color: #ffcc00; /* Warning Yellow */
+                color: #000; /* Solid Black */
+                font-family: 'Arial', sans-serif;
+                font-weight: 900;
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                border-top: 8px solid #111;
+                border-bottom: 8px solid #111;
+                box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+                transform: rotate(-30deg); /* Diagonal tilt */
+                display: flex;
+                white-space: nowrap;
+            }
+            .police-tape-content {
+                display: flex;
+                animation: police-marquee 12s linear infinite; /* Smooth continuous scroll */
+            }
+            .police-tape-text {
+                padding: 15px 40px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+            /* Ensure it NEVER shows up on printed PDFs */
+            @media print {
+                #maintenance-banner-unit { display: none !important; }
+            }
+        </style>
+        <div class="police-tape">
+            <div class="police-tape-content">
+                <div style="display: flex;">
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                </div>
+                <div style="display: flex;">
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                    <span class="police-tape-text">🚧 UNDER MAINTENANCE 🛑</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="app-container" class="max-w-7xl mx-auto w-full p-2 pb-6 md:p-6 flex-grow flex flex-col h-full relative">
+        
         <div id="setup-screen" class="flex-grow overflow-y-auto overflow-x-hidden w-full h-full flex flex-col">
+            
             <div class="m-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-start justify-center w-full max-w-5xl pt-4 pb-8 lg:py-6 px-2">
+                
                 <div class="bg-white/90 backdrop-blur-sm p-6 lg:p-6 rounded-3xl shadow-2xl border-4 border-indigo-400 w-full max-w-md relative z-10 flex-shrink-0">
+                    
                     <div class="absolute -top-6 -left-6 text-5xl text-pink-500 font-black animate-float select-none">＋</div>
                     <div class="absolute -bottom-6 -right-6 text-5xl text-blue-500 font-black animate-float-delayed select-none">－</div>
-                    <h1 class="text-3xl lg:text-3xl font-black text-center mb-5 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">Math Sprint! 🚀</h1>
+
+                    <h1 class="text-3xl lg:text-3xl font-black text-center mb-5 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 tracking-tight">
+                        Math Sprint! 🚀
+                    </h1>
                     
                     <div id="core-settings">
                         <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
@@ -74,12 +176,19 @@
                         <div id="limits-row" class="grid grid-cols-1 gap-4 lg:gap-3 mb-6 transition-all duration-300">
                             <div id="number-limit-container" class="relative">
                                 <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Use numbers up to (+, -)</label>
-                                <input type="number" id="number-limit" value="10" min="10" max="100" oninput="checkNumLimit(this, 100, 'num-hint')" onblur="checkMin(this, 10)" class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <input type="number" id="number-limit" value="10" min="10" max="100" 
+                                    oninput="checkNumLimit(this, 100, 'num-hint')" 
+                                    onblur="checkMin(this, 10)"
+                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
                                 <div id="num-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 100</div>
                             </div>
+                            
                             <div id="table-limit-container" class="relative" style="display: none;">
                                 <label class="block text-[13px] font-bold mb-1.5 text-indigo-900">Tables till (×, ÷)</label>
-                                <input type="number" id="table-limit" value="10" min="5" max="20" oninput="checkNumLimit(this, 20, 'table-hint')" onblur="checkMin(this, 5)" class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
+                                <input type="number" id="table-limit" value="10" min="5" max="20" 
+                                    oninput="checkNumLimit(this, 20, 'table-hint')" 
+                                    onblur="checkMin(this, 5)"
+                                    class="w-full p-2 text-sm border-2 border-indigo-100 rounded-xl focus:ring-4 focus:ring-indigo-300 outline-none font-bold text-gray-700 shadow-sm h-[40px]">
                                 <div id="table-hint" class="absolute -bottom-5 right-1 text-[10px] text-pink-600 font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Max limit is 20</div>
                             </div>
                         </div>
@@ -94,15 +203,19 @@
 
                     <div id="action-buttons" class="grid grid-cols-2 gap-3 mt-2">
                         <button onclick="startSprint()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-lg py-3 rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all duration-200 border-b-4 border-emerald-700 shadow-sm flex flex-col items-center justify-center leading-tight">
-                            <span>Play Online</span><span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
+                            <span>Play Online</span>
+                            <span class="text-[10px] md:text-xs font-bold opacity-90">(10 Min Sprint)</span>
                         </button>
                         <button onclick="showPrintOptions()" class="w-full bg-white text-indigo-600 font-black text-lg py-3 rounded-xl hover:bg-indigo-50 transition-all duration-200 border-2 border-indigo-200 border-b-4 shadow-sm flex flex-col items-center justify-center leading-tight">
-                            <span>Print PDFs</span><span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
+                            <span>Print PDFs</span>
+                            <span class="text-[10px] md:text-xs font-bold opacity-80 text-indigo-400">(A4 Worksheets)</span>
                         </button>
                     </div>
 
                     <div id="print-options" class="hidden flex-col mt-2 pt-4 border-t-2 border-indigo-50 animate-fade-in">
-                        <h3 class="font-black text-indigo-800 mb-3 flex items-center gap-2 text-sm"><span>🖨️ PDF Settings</span></h3>
+                        <h3 class="font-black text-indigo-800 mb-3 flex items-center gap-2 text-sm">
+                            <span>🖨️ PDF Settings</span>
+                        </h3>
                         <div class="grid grid-cols-2 gap-4 lg:gap-3 mb-4">
                             <div>
                                 <label class="block text-[11px] font-bold mb-1 text-indigo-900 uppercase tracking-wide">Start Test No.</label>
@@ -114,12 +227,15 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="hidePrintOptions()" class="w-full bg-gray-100 text-gray-600 font-black text-lg py-3 rounded-xl hover:bg-gray-200 transition-all border-b-4 border-gray-300 shadow-sm">Cancel</button>
+                            <button onclick="hidePrintOptions()" class="w-full bg-gray-100 text-gray-600 font-black text-lg py-3 rounded-xl hover:bg-gray-200 transition-all border-b-4 border-gray-300 shadow-sm">
+                                Cancel
+                            </button>
                             <button id="generate-pdf-btn" onclick="executePrint()" class="w-full bg-indigo-600 text-white font-black text-lg py-3 rounded-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 shadow-sm flex items-center justify-center">
                                 <span id="generate-btn-text">Generate</span>
                             </button>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="relative bg-white px-6 pb-6 pt-10 lg:px-8 lg:pb-6 lg:pt-8 rounded-[3rem] shadow-xl border-4 border-yellow-300 max-w-lg lg:rotate-2 flex-shrink-0 lg:mt-6">
@@ -144,6 +260,7 @@
                     This is Demo of Math Sprint App with minimal features, send feedback to the app creator directly or email kode.drama@gmail.com . You can change parameters before playing or printing. As this is just for demo preferably use on a laptop or desktop in Chrome or Firefox browser to have best experience.
                 </p>
             </div>
+
         </div>
 
         <div id="game-screen" class="hidden flex-row h-full w-full gap-3 md:gap-6 z-10 relative">
@@ -204,6 +321,6 @@
 
     <div id="pdf-export-container" class="fixed top-0 left-[-9999px] bg-white text-black z-[-1]" style="width: 297mm;"></div>
 
-    <script src="./app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
